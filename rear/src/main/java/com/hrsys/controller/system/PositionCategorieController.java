@@ -37,21 +37,21 @@ public class PositionCategorieController {
     @PostMapping
     @ApiOperation(value = "添加职位分类")
     public Result<?> add(@RequestBody @Valid PositionCategorie positionCategorie) {
-        positionCategorieService.save(positionCategorie);
+        positionCategorieService.add(positionCategorie);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除职位分类")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
-        positionCategorieService.removeById(id);
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
+        positionCategorieService.delete(id);
         return Result.success();
     }
 
     @PutMapping
     @ApiOperation(value = "修改职位分类")
     public Result<?> update(@RequestBody @Valid PositionCategorie positionCategorie) {
-        positionCategorieService.updateById(positionCategorie);
+        positionCategorieService.change(positionCategorie);
         return Result.success();
     }
 

@@ -29,17 +29,17 @@ public class SalaryDetail implements Serializable {
      * 明细ID
      */
     @TableId(value = "details_id", type = IdType.AUTO)
-    private Integer detailsId;
+    private Long detailsId;
 
     /**
      * 用户ID
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 薪酬标准ID
      */
-    private Integer standardId;
+    private Long standardId;
 
     /**
      * 奖励金额

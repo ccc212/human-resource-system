@@ -37,21 +37,21 @@ public class RoleController {
     @PostMapping
     @ApiOperation(value = "添加角色")
     public Result<?> add(@RequestBody @Valid Role role) {
-        roleService.save(role);
+        roleService.add(role);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除角色")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
-        roleService.removeById(id);
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
+        roleService.delete(id);
         return Result.success();
     }
 
     @PutMapping
     @ApiOperation(value = "修改角色")
     public Result<?> update(@RequestBody @Valid Role role) {
-        roleService.updateById(role);
+        roleService.change(role);
         return Result.success();
     }
 

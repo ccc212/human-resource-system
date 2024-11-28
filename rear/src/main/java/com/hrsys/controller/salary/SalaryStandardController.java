@@ -37,7 +37,7 @@ public class SalaryStandardController {
 
     @PostMapping("/check")
     @ApiOperation(value = "复核")
-    public Result<?> check(@RequestParam @NotNull Integer standardId, @RequestParam @NotNull Boolean checkIsPass) {
+    public Result<?> check(@RequestParam @NotNull Long standardId, @RequestParam @NotNull Boolean checkIsPass) {
         salaryStandardService.update(new LambdaUpdateWrapper<SalaryStandard>()
                 .eq(SalaryStandard::getStandardId, standardId)
                 .set(SalaryStandard::getReviewStatus, checkIsPass ? "1" : "0"));
@@ -53,7 +53,7 @@ public class SalaryStandardController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
         salaryStandardService.removeById(id);
         return Result.success();
     }
@@ -75,7 +75,7 @@ public class SalaryStandardController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id获取薪酬标准档案")
-    public Result<SalaryStandard> get(@PathVariable @NotNull Integer id) {
+    public Result<SalaryStandard> get(@PathVariable @NotNull Long id) {
         return Result.success(salaryStandardService.getById(id));
     }
 }

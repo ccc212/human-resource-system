@@ -2,6 +2,7 @@ package com.hrsys.service;
 
 import com.hrsys.pojo.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hrsys.pojo.entity.Role;
 
 /**
  * <p>
@@ -13,4 +14,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRoleService extends IService<Role> {
 
+    void add(Role role);
+
+    void delete(Long id);
+
+    void change(Role role);
 }

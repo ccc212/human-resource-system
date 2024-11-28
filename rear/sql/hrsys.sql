@@ -6,32 +6,32 @@ USE hrsys;
 DROP TABLE IF EXISTS user;
 CREATE TABLE user
 (
-    user_id  INT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
+    user_id  BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
     username VARCHAR(50) UNIQUE COMMENT '用户名',
     password VARCHAR(255) COMMENT '密码',
-    role_id  INT DEFAULT 6 COMMENT '角色ID'
+    role_id  BIGINT DEFAULT 6 COMMENT '角色ID'
     -- FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE SET DEFAULT
 ) COMMENT '用户表';
 
 DROP TABLE IF EXISTS organization;
 CREATE TABLE organization
 (
-    org_id    INT PRIMARY KEY AUTO_INCREMENT COMMENT '机构ID',
+    org_id    BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '机构ID',
     org_name  VARCHAR(50) COMMENT '机构名称',
-    parent_id INT DEFAULT 0
+    parent_id BIGINT DEFAULT 0
 ) COMMENT '组织机构表';
 
 DROP TABLE IF EXISTS hr_record;
 CREATE TABLE hr_record
 (
-    record_id              INT PRIMARY KEY AUTO_INCREMENT COMMENT '档案ID',
-    user_id                INT COMMENT '用户ID',
-    org_id_1               INT COMMENT 'I级机构ID',
-    org_id_2               INT COMMENT 'II级机构ID',
-    org_id_3               INT COMMENT 'III级机构ID',
-    category_id            INT COMMENT '职位分类ID',
-    position_id            INT COMMENT '职位ID',
-    title_id               INT COMMENT '职称ID',
+    record_id              BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '档案ID',
+    user_id                BIGINT COMMENT '用户ID',
+    org_id1               BIGINT COMMENT 'I级机构ID',
+    org_id2               BIGINT COMMENT 'II级机构ID',
+    org_id3               BIGINT COMMENT 'III级机构ID',
+    category_id            BIGINT COMMENT '职位分类ID',
+    position_id            BIGINT COMMENT '职位ID',
+    title_id               BIGINT COMMENT '职称ID',
     name                   VARCHAR(50) COMMENT '姓名',
     gender                 CHAR(1) COMMENT '性别（0：男，1：女）',
     email                  VARCHAR(100) COMMENT '电子邮件',
@@ -43,15 +43,15 @@ CREATE TABLE hr_record
     nationality            VARCHAR(50) COMMENT '国籍',
     birthplace             VARCHAR(50) COMMENT '出生地',
     birthdate              DATE COMMENT '出生日期',
-    ethnicity_id           INT COMMENT '民族ID',
+    ethnicity_id           BIGINT COMMENT '民族ID',
     religion               VARCHAR(50) COMMENT '宗教信仰',
     political_affiliation  VARCHAR(50) COMMENT '政治面貌',
     id_number              VARCHAR(20) COMMENT '身份证号码',
     social_security_number VARCHAR(20) COMMENT '社会保障号码',
     age                    INT COMMENT '年龄',
-    education_id           INT COMMENT '学历ID',
+    education_id           BIGINT COMMENT '学历ID',
     major                  VARCHAR(50) COMMENT '专业',
-    salary_standard_id     INT COMMENT '薪酬标准ID',
+    salary_standard_id     BIGINT COMMENT '薪酬标准ID',
     bank_name              VARCHAR(100) COMMENT '开户行',
     account_number         VARCHAR(50) COMMENT '账号',
     skills                 TEXT COMMENT '特长',
@@ -73,10 +73,24 @@ CREATE TABLE hr_record
     -- FOREIGN KEY (title_id) REFERENCES titles(title_id)
 ) COMMENT '人力资源档案表';
 
+-- 插入示例数据
+INSERT INTO hr_record (record_id, user_id, org_id1, org_id2, org_id3, name, gender, email, phone, registration_time, registrar, position_id, title_id)
+VALUES 
+(202401010101, 1, 1, 1, 1, '张三', '0', 'zhangsan@example.com', '13800138001', '2024-01-01 09:00:00', 'admin', 1, 1),
+(202402020202, 2, 2, 2, 2, '李四', '0', 'lisi@example.com', '13800138002', '2024-02-01 09:30:00', 'admin', 2, 2),
+(202403030303, 3, 3, 3, 3, '王五', '1', 'wangwu@example.com', '13800138003', '2024-03-01 10:00:00', 'admin', 3, 1),
+(202404040404, 4, 1, 2, 1, '赵六', '0', 'zhaoliu@example.com', '13800138004', '2024-04-01 10:30:00', 'admin', 1, 3),
+(202405050505, 5, 2, 1, 2, '孙七', '1', 'sunqi@example.com', '13800138005', '2024-05-01 11:00:00', 'admin', 2, 2),
+(202406060606, 6, 3, 2, 3, '周八', '0', 'zhouba@example.com', '13800138006', '2024-06-01 11:30:00', 'admin', 3, 1),
+(202407070707, 7, 1, 3, 1, '吴九', '1', 'wujiu@example.com', '13800138007', '2024-07-01 12:00:00', 'admin', 1, 2),
+(202408080808, 8, 2, 3, 2, '郑十', '0', 'zhengshi@example.com', '13800138008', '2024-08-01 12:30:00', 'admin', 2, 3),
+(202409090909, 9, 3, 1, 3, '钱十一', '1', 'qianshiyi@example.com', '13800138009', '2024-09-01 13:00:00', 'admin', 3, 1),
+(202410101010, 10, 1, 2, 2, '陈十二', '0', 'chenshier@example.com', '13800138010', '2024-10-01 13:30:00', 'admin', 1, 2);
+
 DROP TABLE IF EXISTS salary_standard;
 CREATE TABLE salary_standard
 (
-    standard_id              INT PRIMARY KEY AUTO_INCREMENT COMMENT '薪酬标准编号',
+    standard_id              BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '薪酬标准编号',
     name                     VARCHAR(50) NOT NULL COMMENT '薪酬标准名称',
     creator                  VARCHAR(50) NOT NULL COMMENT '制定人',
     registrar                VARCHAR(50) NOT NULL DEFAULT '' COMMENT '登记人',
@@ -96,11 +110,11 @@ CREATE TABLE salary_standard
 DROP TABLE IF EXISTS salary_payment;
 CREATE TABLE salary_payment
 (
-    payment_id        INT PRIMARY KEY AUTO_INCREMENT COMMENT '薪酬发放单ID',
-    details_id        INT COMMENT '明细ID',
-    org_id_1          INT COMMENT 'I级机构ID',
-    org_id_2          INT COMMENT 'II级机构ID',
-    org_id_3          INT COMMENT 'III级机构ID',
+    payment_id        BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '薪酬发放单ID',
+    details_id        BIGINT COMMENT '明细ID',
+    org_id1          BIGINT COMMENT 'I级机构ID',
+    org_id2          BIGINT COMMENT 'II级机构ID',
+    org_id3          BIGINT COMMENT 'III级机构ID',
     registrar         VARCHAR(50)    NOT NULL DEFAULT '' COMMENT '登记人',
     registration_time DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登记时间',
     total_people      INT            NOT NULL DEFAULT 0 COMMENT '发放人数',
@@ -113,9 +127,9 @@ CREATE TABLE salary_payment
 DROP TABLE IF EXISTS salary_detail;
 CREATE TABLE salary_detail
 (
-    details_id   INT PRIMARY KEY AUTO_INCREMENT COMMENT '明细ID',
-    user_id      INT COMMENT '用户ID',
-    standard_id  INT COMMENT '薪酬标准ID',
+    details_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '明细ID',
+    user_id      BIGINT COMMENT '用户ID',
+    standard_id  BIGINT COMMENT '薪酬标准ID',
     bonus        DECIMAL(10, 2) DEFAULT 0.00 COMMENT '奖励金额',
     deductions   DECIMAL(10, 2) DEFAULT 0.00 COMMENT '应扣奖金',
     total_amount DECIMAL(10, 2) COMMENT '薪酬总额'
@@ -126,7 +140,7 @@ CREATE TABLE salary_detail
 DROP TABLE IF EXISTS role;
 CREATE TABLE role
 (
-    role_id   INT PRIMARY KEY AUTO_INCREMENT COMMENT '角色ID',
+    role_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '角色ID',
     role_name VARCHAR(50) UNIQUE COMMENT '角色名称'
 ) COMMENT '角色表';
 
@@ -141,7 +155,7 @@ VALUES (1, '管理员'),
 DROP TABLE IF EXISTS position_categorie;
 CREATE TABLE position_categorie
 (
-    category_id   INT PRIMARY KEY AUTO_INCREMENT COMMENT '职位分类ID',
+    category_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '职位分类ID',
     category_name VARCHAR(50) COMMENT '职位分类名称'
 ) COMMENT '职位分类表';
 
@@ -155,9 +169,9 @@ VALUES (1, '软件开发'),
 DROP TABLE IF EXISTS position;
 CREATE TABLE position
 (
-    position_id   INT PRIMARY KEY AUTO_INCREMENT COMMENT '职位ID',
+    position_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '职位ID',
     position_name VARCHAR(50) COMMENT '职位名称',
-    category_id   INT COMMENT '职位分类ID'
+    category_id   BIGINT COMMENT '职位分类ID'
     -- FOREIGN KEY (category_id) REFERENCES position_categories(category_id)
 ) COMMENT '职位表';
 
@@ -191,7 +205,7 @@ VALUES (1, '初级开发工程师', 1),
 DROP TABLE IF EXISTS title;
 CREATE TABLE title
 (
-    title_id   INT PRIMARY KEY AUTO_INCREMENT COMMENT '职称ID',
+    title_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '职称ID',
     title_name VARCHAR(50) COMMENT '职称'
 ) COMMENT '职称表';
 
@@ -205,7 +219,7 @@ VALUES (1, '助理'),
 DROP TABLE IF EXISTS ethnicitie;
 CREATE TABLE ethnicitie
 (
-    ethnicity_id   INT PRIMARY KEY COMMENT '民族ID',
+    ethnicity_id   BIGINT PRIMARY KEY COMMENT '民族ID',
     ethnicity_name VARCHAR(50) COMMENT '民族名称'
 ) COMMENT '民族表';
 
@@ -270,7 +284,7 @@ VALUES (1, '汉族'),
 DROP TABLE IF EXISTS education;
 CREATE TABLE education
 (
-    education_id   INT PRIMARY KEY AUTO_INCREMENT COMMENT '学历ID',
+    education_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '学历ID',
     education_name VARCHAR(50) COMMENT '学历名称'
 ) COMMENT '学历表';
 

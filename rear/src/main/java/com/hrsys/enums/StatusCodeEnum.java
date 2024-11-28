@@ -26,7 +26,13 @@ public enum StatusCodeEnum {
 
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "无效token"),
 
-    TITLE_ID_EXISTS(HttpStatus.BAD_REQUEST, "职称已存在");
+    EXISTS(HttpStatus.BAD_REQUEST, "已存在"),
+
+    NOT_EXISTS(HttpStatus.BAD_REQUEST, "不存在"),
+
+    UPLOAD_FAILED(HttpStatus.ERROR, "上传失败"),
+
+    DOWNLOAD_FAILED(HttpStatus.ERROR, "下载失败");
 
     private final Integer code;
 

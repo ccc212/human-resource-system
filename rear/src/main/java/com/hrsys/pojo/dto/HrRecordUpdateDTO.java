@@ -1,66 +1,25 @@
-package com.hrsys.pojo.entity;
+package com.hrsys.pojo.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-/**
- * <p>
- * 人力资源档案表
- * </p>
- *
- * @author 
- * @since 2024-11-27
- */
-@Data
-@AllArgsConstructor
-public class HrRecord implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Getter
+@NoArgsConstructor
+public class HrRecordUpdateDTO {
 
     /**
      * 档案ID
      */
-    @TableId(value = "record_id", type = IdType.AUTO)
     private Long recordId;
 
     /**
      * 用户ID
      */
     private Long userId;
-
-    /**
-     * I级机构ID
-     */
-    private Long orgId1;
-
-    /**
-     * II级机构ID
-     */
-    private Long orgId2;
-
-    /**
-     * III级机构ID
-     */
-    private Long orgId3;
-
-    /**
-     * 职位分类ID
-     */
-    private Long categoryId;
-
-    /**
-     * 职位ID
-     */
-    private Long positionId;
 
     /**
      * 职称ID
@@ -215,12 +174,11 @@ public class HrRecord implements Serializable {
     /**
      * 登记时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registrationTime;
 
     /**
      * 状态（0：未复核，1：已复核，2：已删除）
      */
     private String status;
-
-
 }

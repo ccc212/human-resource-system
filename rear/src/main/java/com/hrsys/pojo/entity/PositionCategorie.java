@@ -30,7 +30,7 @@ public class PositionCategorie implements Serializable {
      * 职位分类ID
      */
     @TableId(value = "category_id", type = IdType.AUTO)
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 职位分类名称

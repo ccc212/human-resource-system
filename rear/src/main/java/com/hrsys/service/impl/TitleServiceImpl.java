@@ -22,8 +22,24 @@ public class TitleServiceImpl extends ServiceImpl<TitleMapper, Title> implements
     @Override
     public void add(Title title) {
         if (lambdaQuery().eq(Title::getTitleId, title.getTitleId()).one() != null) {
-            throw new BizException(StatusCodeEnum.TITLE_ID_EXISTS);
+            throw new BizException(StatusCodeEnum.EXISTS);
         }
         save(title);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (lambdaQuery().eq(Title::getTitleId, id).one() == null) {
+            throw new BizException(StatusCodeEnum.NOT_EXISTS);
+        }
+        removeById(id);
+    }
+
+    @Override
+    public void change(Title title) {
+        if (lambdaQuery().eq(Title::getTitleId, title.getTitleId()).one() == null) {
+            throw new BizException(StatusCodeEnum.NOT_EXISTS);
+        }
+        updateById(title);
     }
 }

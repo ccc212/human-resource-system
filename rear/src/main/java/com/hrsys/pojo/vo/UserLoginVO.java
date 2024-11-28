@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UserLoginVO implements Serializable {
 
-    private Integer userId;
+    private Long userId;
 
     private String token;
 }

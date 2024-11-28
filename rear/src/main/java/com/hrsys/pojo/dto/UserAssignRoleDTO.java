@@ -10,9 +10,9 @@ import javax.validation.constraints.NotNull;
 public class UserAssignRoleDTO {
 
     @NotNull(message = "用户id不能为空")
-    private Integer userId;
+    private Long userId;
 
     @NotNull(message = "角色id不能为空")
-    private Integer roleId;
+    private Long roleId;
 
 }

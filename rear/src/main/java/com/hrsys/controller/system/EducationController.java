@@ -43,7 +43,7 @@ public class EducationController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除学历")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
         educationService.removeById(id);
         return Result.success();
     }

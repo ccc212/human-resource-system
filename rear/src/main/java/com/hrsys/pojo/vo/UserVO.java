@@ -8,10 +8,10 @@ import java.io.Serializable;
 @Builder
 public class UserVO implements Serializable {
 
-    private Integer userId;
+    private Long userId;
 
     private String username;
 
-    private Integer roleId;
+    private Long roleId;
 
 }

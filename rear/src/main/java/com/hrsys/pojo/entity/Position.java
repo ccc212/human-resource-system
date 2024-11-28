@@ -31,7 +31,7 @@ public class Position implements Serializable {
      * 职位ID
      */
     @TableId(value = "position_id", type = IdType.AUTO)
-    private Integer positionId;
+    private Long positionId;
 
     /**
      * 职位名称
@@ -43,7 +43,7 @@ public class Position implements Serializable {
      * 职位分类ID
      */
     @NotNull(message = "职位分类id不能为空")
-    private Integer categoryId;
+    private Long categoryId;
 
 
 }

@@ -42,7 +42,7 @@ public class SalaryDetailController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除薪酬发放明细")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
         hrRecordService.removeById(id);
         return Result.success();
     }

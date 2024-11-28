@@ -43,7 +43,7 @@ public class EthnicitieController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除民族")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
         ethnicitieService.removeById(id);
         return Result.success();
     }

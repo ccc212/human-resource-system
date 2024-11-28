@@ -32,7 +32,7 @@ public class Education implements Serializable {
      * 学历ID
      */
     @TableId(value = "education_id", type = IdType.AUTO)
-    private Integer educationId;
+    private Long educationId;
 
     /**
      * 学历名称

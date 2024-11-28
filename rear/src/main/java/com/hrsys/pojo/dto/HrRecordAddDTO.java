@@ -1,36 +1,16 @@
-package com.hrsys.pojo.entity;
+package com.hrsys.pojo.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
-import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-/**
- * <p>
- * 人力资源档案表
- * </p>
- *
- * @author 
- * @since 2024-11-27
- */
-@Data
-@AllArgsConstructor
-public class HrRecord implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 档案ID
-     */
-    @TableId(value = "record_id", type = IdType.AUTO)
-    private Long recordId;
+@Getter
+@NoArgsConstructor
+public class HrRecordAddDTO {
 
     /**
      * 用户ID
@@ -40,26 +20,31 @@ public class HrRecord implements Serializable {
     /**
      * I级机构ID
      */
+    @NotNull(message = "I级机构不能为空")
     private Long orgId1;
 
     /**
      * II级机构ID
      */
+    @NotNull(message = "II级机构不能为空")
     private Long orgId2;
 
     /**
      * III级机构ID
      */
+    @NotNull(message = "III级机构不能为空")
     private Long orgId3;
 
     /**
      * 职位分类ID
      */
+    @NotNull(message = "职位分类不能为空")
     private Long categoryId;
 
     /**
      * 职位ID
      */
+    @NotNull(message = "职位不能为空")
     private Long positionId;
 
     /**
@@ -75,6 +60,7 @@ public class HrRecord implements Serializable {
     /**
      * 性别（0：男，1：女）
      */
+    @NotBlank(message = "性别不能为空")
     private String gender;
 
     /**
@@ -125,6 +111,7 @@ public class HrRecord implements Serializable {
     /**
      * 民族ID
      */
+    @NotNull(message = "民族不能为空")
     private Long ethnicityId;
 
     /**
@@ -155,6 +142,7 @@ public class HrRecord implements Serializable {
     /**
      * 学历ID
      */
+    @NotNull(message = "学历不能为空")
     private Long educationId;
 
     /**
@@ -221,6 +209,4 @@ public class HrRecord implements Serializable {
      * 状态（0：未复核，1：已复核，2：已删除）
      */
     private String status;
-
-
 }

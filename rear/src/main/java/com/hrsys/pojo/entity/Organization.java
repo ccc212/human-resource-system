@@ -33,7 +33,7 @@ public class Organization implements Serializable {
      * 机构ID
      */
     @TableId(value = "org_id", type = IdType.AUTO)
-    private Integer orgId;
+    private Long orgId;
 
     /**
      * 机构名称
@@ -42,7 +42,7 @@ public class Organization implements Serializable {
     private String orgName;
 
     @NotNull(message = "父级机构ID不能为空")
-    private Integer parentId;
+    private Long parentId;
 
 
 }

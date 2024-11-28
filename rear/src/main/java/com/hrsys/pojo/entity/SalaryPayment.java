@@ -30,27 +30,27 @@ public class SalaryPayment implements Serializable {
      * 薪酬发放单ID
      */
     @TableId(value = "payment_id", type = IdType.AUTO)
-    private Integer paymentId;
+    private Long paymentId;
 
     /**
      * 明细ID
      */
-    private Integer detailsId;
+    private Long detailsId;
 
     /**
      * I级机构ID
      */
-    private Integer orgId1;
+    private Long orgId1;
 
     /**
      * II级机构ID
      */
-    private Integer orgId2;
+    private Long orgId2;
 
     /**
      * III级机构ID
      */
-    private Integer orgId3;
+    private Long orgId3;
 
     /**
      * 登记人

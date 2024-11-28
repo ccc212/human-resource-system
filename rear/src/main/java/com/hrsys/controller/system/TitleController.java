@@ -37,22 +37,21 @@ public class TitleController {
     @PostMapping
     @ApiOperation(value = "添加职称")
     public Result<?> add(@RequestBody @Valid Title title) {
-//        titleService.add(title);
-        titleService.save(title);
+        titleService.add(title);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除职称")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
-        titleService.removeById(id);
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
+        titleService.delete(id);
         return Result.success();
     }
 
     @PutMapping
     @ApiOperation(value = "修改职称")
     public Result<?> update(@RequestBody @Valid Title title) {
-        titleService.updateById(title);
+        titleService.change(title);
         return Result.success();
     }
 

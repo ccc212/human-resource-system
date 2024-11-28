@@ -13,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOrganizationService extends IService<Organization> {
 
+    void add(Organization organization);
+
+    void delete(Long id);
+
+    void change(Organization organization);
 }

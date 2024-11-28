@@ -30,7 +30,7 @@ public class SalaryStandard implements Serializable {
      * 薪酬标准编号
      */
     @TableId(value = "standard_id", type = IdType.AUTO)
-    private Integer standardId;
+    private Long standardId;
 
     /**
      * 薪酬标准名称

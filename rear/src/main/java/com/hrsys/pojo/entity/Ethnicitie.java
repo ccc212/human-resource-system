@@ -32,7 +32,7 @@ public class Ethnicitie implements Serializable {
      * 民族ID
      */
     @TableId(value = "ethnicity_id", type = IdType.AUTO)
-    private Integer ethnicityId;
+    private Long ethnicityId;
 
     /**
      * 民族名称

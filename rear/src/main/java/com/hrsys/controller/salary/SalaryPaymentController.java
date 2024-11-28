@@ -45,7 +45,7 @@ public class SalaryPaymentController {
 
     @PostMapping
     @ApiOperation(value = "提交")
-    public Result<?> submit(@RequestParam @NotNull Integer paymentId,
+    public Result<?> submit(@RequestParam @NotNull Long paymentId,
                             @RequestParam @NotNull Boolean checkIsPass) {
         salaryPaymentService.update(new LambdaUpdateWrapper<SalaryPayment>()
                 .eq(SalaryPayment::getPaymentId, paymentId)
@@ -55,7 +55,7 @@ public class SalaryPaymentController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除")
-    public Result<?> delete(@PathVariable @NotNull Integer id) {
+    public Result<?> delete(@PathVariable @NotNull Long id) {
         salaryPaymentService.removeById(id);
         return Result.success();
     }

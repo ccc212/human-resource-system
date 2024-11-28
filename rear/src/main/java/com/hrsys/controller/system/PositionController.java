@@ -37,21 +37,21 @@ public class PositionController {
     @PostMapping
     @ApiOperation(value = "添加职位")
     public Result<?> add(@RequestBody @Valid Position position) {
-        positionService.save(position);
+        positionService.add(position);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除职位")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
-        positionService.removeById(id);
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
+        positionService.delete(id);
         return Result.success();
     }
 
     @PutMapping
     @ApiOperation(value = "修改职位")
     public Result<?> update(@RequestBody @Valid Position position) {
-        positionService.updateById(position);
+        positionService.change(position);
         return Result.success();
     }
 

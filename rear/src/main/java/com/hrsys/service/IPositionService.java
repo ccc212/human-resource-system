@@ -13,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPositionService extends IService<Position> {
 
+    void add(Position position);
+
+    void delete(Long id);
+
+    void change(Position position);
 }

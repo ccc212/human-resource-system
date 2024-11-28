@@ -33,7 +33,7 @@ public class Title implements Serializable {
      * 职称ID
      */
     @TableId(value = "title_id", type = IdType.AUTO)
-    private Integer titleId;
+    private Long titleId;
 
     /**
      * 职称

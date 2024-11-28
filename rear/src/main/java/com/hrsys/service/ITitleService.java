@@ -14,4 +14,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ITitleService extends IService<Title> {
 
     void add(Title title);
+
+    void delete(Long id);
+
+    void change(Title title);
 }

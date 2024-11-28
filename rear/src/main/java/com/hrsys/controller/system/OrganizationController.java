@@ -37,21 +37,21 @@ public class OrganizationController {
     @PostMapping
     @ApiOperation(value = "添加组织机构")
     public Result<?> add(@RequestBody @Valid Organization organization) {
-        organizationService.save(organization);
+        organizationService.add(organization);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除组织机构")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Integer id) {
-        organizationService.removeById(id);
+    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
+        organizationService.delete(id);
         return Result.success();
     }
 
     @PutMapping
     @ApiOperation(value = "修改组织机构")
     public Result<?> update(@RequestBody @Valid Organization organization) {
-        organizationService.updateById(organization);
+        organizationService.change(organization);
         return Result.success();
     }
 

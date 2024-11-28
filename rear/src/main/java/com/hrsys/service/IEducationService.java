@@ -2,6 +2,7 @@ package com.hrsys.service;
 
 import com.hrsys.pojo.entity.Education;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hrsys.pojo.entity.Title;
 
 /**
  * <p>
@@ -13,4 +14,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IEducationService extends IService<Education> {
 
+    void add(Education education);
+
+    void delete(Integer id);
+
+    void change(Education education);
 }
