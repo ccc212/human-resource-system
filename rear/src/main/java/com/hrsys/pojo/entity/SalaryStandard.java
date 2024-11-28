@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.hrsys.exception.BizException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -119,15 +121,15 @@ public class SalaryStandard implements Serializable {
                                        BigDecimal transportationAllowance, BigDecimal lunchAllowance, BigDecimal communicationAllowance) {
         // 验证薪酬标准名称不为空
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("薪酬标准名称不能为空");
+            throw new BizException("薪酬标准名称不能为空");
         }
         // 验证制定人不为空
         if (creator == null || creator.isEmpty()) {
-            throw new IllegalArgumentException("制定人不能为空");
+            throw new BizException("制定人不能为空");
         }
         // 验证登记人不为空
         if (registrar == null || registrar.isEmpty()) {
-            throw new IllegalArgumentException("登记人不能为空");
+            throw new BizException("登记人不能为空");
         }
 
         // 计算五险一金
