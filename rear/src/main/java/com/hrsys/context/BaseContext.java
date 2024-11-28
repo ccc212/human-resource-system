@@ -1,19 +1,22 @@
 package com.hrsys.context;
 
+import io.jsonwebtoken.Claims;
+
+
 public class BaseContext {
 
-    public static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
+    public static ThreadLocal<Claims> claimsThreadLocal = new ThreadLocal<>();
 
-    public static void setCurrentId(Long id) {
-        threadLocal.set(id);
+    public static void setClaims(Claims claims) {
+        claimsThreadLocal.set(claims);
     }
 
-    public static Long getCurrentId() {
-        return threadLocal.get();
+    public static Claims getClaims() {
+        return claimsThreadLocal.get();
     }
 
-    public static void removeCurrentId() {
-        threadLocal.remove();
+    public static void removeClaims() {
+        claimsThreadLocal.remove();
     }
 
 }
