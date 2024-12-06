@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SalaryStandardServiceImpl extends ServiceImpl<SalaryStandardMapper, SalaryStandard> implements ISalaryStandardService {
 
+        public void createSalaryStandard(SalaryStandard salaryStandard) {
+
+                baseMapper.insert(salaryStandard);
+        }
 }

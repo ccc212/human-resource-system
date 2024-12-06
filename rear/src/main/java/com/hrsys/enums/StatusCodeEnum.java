@@ -34,6 +34,7 @@ public enum StatusCodeEnum {
 
     DOWNLOAD_FAILED(HttpStatus.ERROR, "下载失败");
 
+
     private final Integer code;
 
     private final String desc;

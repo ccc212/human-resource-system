@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -101,6 +103,45 @@ public class SalaryStandard implements Serializable {
      * 复核意见
      */
     private String reviewComment;
+
+    public boolean checkIsPass() {
+        // 检查薪酬标准名称、制定人和登记人不能为空
+        if (name == null || name.isEmpty() || creator == null || creator.isEmpty() || registrar == null || registrar.isEmpty()) {
+            return false;
+        }
+
+        // 如果基本工资为空，则默认为0.00
+        if (baseSalary == null) {
+            baseSalary = BigDecimal.ZERO;
+        }
+
+        // 计算养老保险、医疗保险、失业保险和住房公积金
+        pensionInsurance = baseSalary.multiply(new BigDecimal("0.08")).setScale(2, RoundingMode.HALF_UP);
+        medicalInsurance = baseSalary.multiply(new BigDecimal("0.02")).add(new BigDecimal("3.00")).setScale(2, RoundingMode.HALF_UP);
+        unemploymentInsurance = baseSalary.multiply(new BigDecimal("0.005")).setScale(2, RoundingMode.HALF_UP);
+        housingFund = baseSalary.multiply(new BigDecimal("0.08")).setScale(2, RoundingMode.HALF_UP);
+
+        // 检查各薪酬项目对应的金额数为数字类型，保留两位小数
+        if (transportationAllowance == null) {
+            transportationAllowance = BigDecimal.ZERO;
+        } else {
+            transportationAllowance = transportationAllowance.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        if (lunchAllowance == null) {
+            lunchAllowance = BigDecimal.ZERO;
+        } else {
+            lunchAllowance = lunchAllowance.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        if (communicationAllowance == null) {
+            communicationAllowance = BigDecimal.ZERO;
+        } else {
+            communicationAllowance = communicationAllowance.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        return true;
+    }
 
 
 }

@@ -9,6 +9,7 @@ import com.hrsys.pojo.entity.Result;
 import com.hrsys.pojo.entity.SalaryStandard;
 import com.hrsys.service.ISalaryStandardService;
 import com.hrsys.service.ISalaryStandardService;
+import com.hrsys.service.impl.SalaryStandardServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,35 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class SalaryStandardController {
 
-    private final ISalaryStandardService salaryStandardService;
+    private final SalaryStandardServiceImpl salaryStandardService;
 
+
+
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "删除")
+    public Result<?> delete(@PathVariable  Long id) {
+        salaryStandardService.removeById(id);
+        return Result.success();
+    }
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id获取薪酬标准档案")
+    public Result<SalaryStandard> get(@PathVariable  Long id) {
+        return Result.success(salaryStandardService.getById(id));
+    }
+    @PutMapping("/{id}/{parm}")
+    @ApiOperation(value = "变更")
+    public Result<?> update(@RequestBody SalaryStandard salaryStandard) {
+        salaryStandardService.updateById(salaryStandard);
+        return Result.success();
+    }
+
+    @GetMapping("/list")
+    @ApiOperation(value = "获取薪酬标准列表")
+    public Result<IPage<SalaryStandard>> list(@RequestParam(defaultValue = "1") Integer current,
+                                              @RequestParam(defaultValue = "10") Integer pageSize) {
+        Page<SalaryStandard> page = new Page<>(current, pageSize);
+        return Result.success(salaryStandardService.page(page));
+    }
     @PostMapping("/check")
     @ApiOperation(value = "复核")
     public Result<?> check(@RequestParam @NotNull Long standardId, @RequestParam @NotNull Boolean checkIsPass) {
@@ -44,38 +72,13 @@ public class SalaryStandardController {
         return Result.success();
     }
 
-    @PostMapping
+    @PostMapping("/new")
     @ApiOperation(value = "登记")
     public Result<?> add(@RequestBody @Valid SalaryStandard salaryStandard) {
-        salaryStandardService.save(salaryStandard);
+        if(!salaryStandard.checkIsPass()){
+            return Result.error("不符合规范的薪酬标准");
+        }
+        salaryStandardService. createSalaryStandard(salaryStandard);
         return Result.success();
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "删除")
-    public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
-        salaryStandardService.removeById(id);
-        return Result.success();
-    }
-
-    @PutMapping
-    @ApiOperation(value = "变更")
-    public Result<?> update(@RequestBody @Valid SalaryStandard salaryStandard) {
-        salaryStandardService.updateById(salaryStandard);
-        return Result.success();
-    }
-
-    @GetMapping("/list")
-    @ApiOperation(value = "获取薪酬标准列表")
-    public Result<IPage<SalaryStandard>> list(@RequestParam(defaultValue = "1") Integer current,
-                                        @RequestParam(defaultValue = "10") Integer pageSize) {
-        Page<SalaryStandard> page = new Page<>(current, pageSize);
-        return Result.success(salaryStandardService.page(page));
-    }
-
-    @GetMapping("/{id}")
-    @ApiOperation(value = "根据id获取薪酬标准档案")
-    public Result<SalaryStandard> get(@PathVariable @NotNull Long id) {
-        return Result.success(salaryStandardService.getById(id));
     }
 }
