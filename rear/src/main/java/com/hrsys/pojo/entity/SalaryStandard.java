@@ -10,12 +10,10 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.hrsys.pojo.dao.SSitem;
+import com.hrsys.pojo.dao.SSitemDetailDao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import javax.validation.Valid;
 
 /**
  * <p>
@@ -66,7 +64,7 @@ public class SalaryStandard implements Serializable {
     /**
      * 薪酬项目列表
      */
-    private List<SSitem> items = new ArrayList<>();
+    private List<SSitemDetailDao> items = new ArrayList<>();
 
     /**
      * 复核状态（0：未复核，1：已复核）
@@ -119,14 +117,14 @@ public class SalaryStandard implements Serializable {
     private void initializeItems() {
         if (items == null || items.isEmpty()) {
             items = new ArrayList<>();
-            items.add(new SSitem("基本工资", BigDecimal.ZERO));
-            items.add(new SSitem("交通补助", BigDecimal.ZERO));
-            items.add(new SSitem("午餐补助", BigDecimal.ZERO));
-            items.add(new SSitem("通信补助", BigDecimal.ZERO));
-            items.add(new SSitem("养老保险", BigDecimal.ZERO));
-            items.add(new SSitem("医疗保险", BigDecimal.ZERO));
-            items.add(new SSitem("失业保险", BigDecimal.ZERO));
-            items.add(new SSitem("住房公积金", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("基本工资", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("交通补助", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("午餐补助", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("通信补助", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("养老保险", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("医疗保险", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("失业保险", BigDecimal.ZERO));
+            items.add(new SSitemDetailDao("住房公积金", BigDecimal.ZERO));
         }
     }
 
@@ -136,7 +134,7 @@ public class SalaryStandard implements Serializable {
      * 要么被规范化为两位小数的格式，以确保数据的一致性和准确性
      */
     private void standardizeItems() {
-        for (SSitem item : items) {
+        for (SSitemDetailDao item : items) {
             // 检查项目账户金额是否为空
             if (item.getAccount() == null) {
                 // 如果为空，则设置为零
@@ -164,7 +162,7 @@ public class SalaryStandard implements Serializable {
      * 设置项目金额
      */
     public void setItemAmount(String name, BigDecimal amount) {
-        for (SSitem item : items) {
+        for (SSitemDetailDao item : items) {
             if (item.getName().equals(name)) {
                 item.setAccount(amount);
                 break;
@@ -176,7 +174,7 @@ public class SalaryStandard implements Serializable {
      * 获取项目金额
      */
     public BigDecimal getItemAmount(String name) {
-        for (SSitem item : items) {
+        for (SSitemDetailDao item : items) {
             if (item.getName().equals(name)) {
                 return item.getAccount();
             }

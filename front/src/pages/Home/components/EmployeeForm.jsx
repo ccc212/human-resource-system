@@ -3,17 +3,15 @@ import {
   Input, 
   Select, 
   DatePicker, 
-  Upload, 
   Button, 
   Row, 
   Col, 
   Card,
-  InputNumber 
+  InputNumber,
+  message 
 } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
-const { TextArea } = Input;
 const { Option } = Select;
 
 const EmployeeForm = () => {
@@ -87,7 +85,7 @@ const EmployeeForm = () => {
             <Form.Item 
               name="level2Org" 
               label="II级机构"
-              rules={[{ required: true, message: '请选择II级机构' }]}
+              rules={[{ required: true, message: '请选择II级机��' }]}
             >
               <Select placeholder="请选择II级机构">
                 {mockData.organizations.level2.map(org => (
@@ -308,6 +306,12 @@ const EmployeeForm = () => {
                 style={{ width: '100%' }}
                 formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={value => value.replace(/\￥\s?|(,*)/g, '')}
+                rules={[
+                  {
+                    pattern: /^¥\d+(\.\d{1,2})?$/,
+                    message: '请输入正确的工资金额格式，如：¥5000 或 ¥5000.00',
+                  }
+                ]}
               />
             </Form.Item>
           </Col>

@@ -71,7 +71,9 @@ const mockData = [
       key: 'id',
       width: 120,
       render: (text) => (
-        <a onClick={() => navigate(`/home/salary-standard/detail/${text}`)}>{text}</a>
+        <Button type="link" onClick={() => navigate(`/home/salary-standard/detail/${text}`)}>
+          查看
+        </Button>
       ),
     },
     {

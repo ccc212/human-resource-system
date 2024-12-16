@@ -1,9 +1,8 @@
 import { Card, Descriptions, Button, Space } from 'antd';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const SalaryStandardDetail = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
 
   // 模拟获取详情数据

@@ -11,7 +11,8 @@ import {
   PayCircleOutlined,
   ProfileOutlined,
   AccountBookOutlined,
-  BarChartOutlined 
+  BarChartOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons';
 import { useNavigate, Outlet } from 'react-router-dom';
 import EmployeeForm from './components/EmployeeForm';
@@ -19,10 +20,11 @@ import EmployeeList from './components/EmployeeList';
 import SalaryStandard from './components/SalaryStandard';
 import SalaryPayment from './components/SalaryPayment';
 import SalaryStatistics from './components/SalaryStatistics';
+import SalaryItems from './components/SalaryItems';
 import './style.css';
 
 const { Header, Sider, Content } = Layout;
-const { TabPane } = Tabs;
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -86,6 +88,12 @@ const Home = () => {
       label: '薪酬管理',
       children: [
         {
+          key: 'salary-items',
+          icon: <AppstoreOutlined />,
+          label: '薪资项目',
+          onClick: () => setActiveTab('salary-items'),
+        },
+        {
           key: 'salary-standard',
           icon: <ProfileOutlined />,
           label: '薪酬标准',
@@ -138,6 +146,11 @@ const Home = () => {
       key: 'salary-statistics',
       label: '薪酬统计',
       children: <SalaryStatistics />
+    },
+    {
+      key: 'salary-items',
+      label: '薪资项目管理',
+      children: <SalaryItems />
     }
   ];
 

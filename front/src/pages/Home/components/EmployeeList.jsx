@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   Table, 
   Card, 
@@ -36,7 +36,7 @@ const EmployeeList = () => {
   const [searchForm] = Form.useForm();
 
   // 先定义所有处理函数
-  const fetchData = (searchParams = {}) => {
+  const fetchData = useCallback(() => {
     setLoading(true);
     // 模拟API请求
     setTimeout(() => {
@@ -47,7 +47,7 @@ const EmployeeList = () => {
       }));
       setLoading(false);
     }, 500);
-  };
+  }, []);
 
   const handleSearch = () => {
     const values = searchForm.getFieldsValue();
@@ -276,7 +276,7 @@ const EmployeeList = () => {
   // 初始加载
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <Card>

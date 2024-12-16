@@ -6,7 +6,7 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const SalaryStatistics = () => {
-  const [activeTab, setActiveTab] = useState('employee-add');
+  const [activeTab, setActiveTab] = useState('1');
 
   // 图表数据
   const data = [

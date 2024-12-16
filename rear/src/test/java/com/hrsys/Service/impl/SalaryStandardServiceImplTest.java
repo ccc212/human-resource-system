@@ -35,14 +35,7 @@ public class SalaryStandardServiceImplTest {
         salaryStandard.setName("Test Standard");
         salaryStandard.setCreator("Test Creator");
         salaryStandard.setRegistrar("Test Registrar");
-        salaryStandard.setBaseSalary(BigDecimal.valueOf(5000));
-        salaryStandard.setTransportationAllowance(BigDecimal.valueOf(100.00));
-        salaryStandard.setLunchAllowance(BigDecimal.valueOf(200.00));
-        salaryStandard.setCommunicationAllowance(BigDecimal.valueOf(500.00));
-        salaryStandard.setPensionInsurance(BigDecimal.valueOf(400.00));
-        salaryStandard.setMedicalInsurance(BigDecimal.valueOf(103.00));
-        salaryStandard.setUnemploymentInsurance(BigDecimal.valueOf(25.00));
-        salaryStandard.setHousingFund(BigDecimal.valueOf(400.00));
+
 
         // 模拟 saveUsingSelectKey 方法
 //        when(salaryStandardMapper.saveUsingSelectKey(salaryStandard)).thenReturn(1L); // 假设返回的 ID 是 1
