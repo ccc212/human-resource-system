@@ -4,16 +4,13 @@ package com.hrsys.controller.humanResource;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hrsys.enums.FilePathEnum;
 import com.hrsys.pojo.dto.HrRecordAddDTO;
 import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
-import com.hrsys.pojo.entity.HrRecord;
 import com.hrsys.pojo.entity.Result;
 import com.hrsys.service.IHrRecordService;
-import com.hrsys.service.IHrRecordService;
-import com.hrsys.strategy.storage.StorageStrategyContext;
+import com.hrsys.service.IMinIOService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -41,12 +37,12 @@ import java.time.LocalDateTime;
 public class HrRecordController {
 
     private final IHrRecordService hrRecordService;
-    private final StorageStrategyContext storageStrategyContext;
+    private final IMinIOService minIOService;
 
     @PostMapping("/avatar")
     @ApiOperation(value = "上传头像")
     public Result<String> uploadAvatar(@RequestParam MultipartFile avatar) {
-        return Result.success(storageStrategyContext.executeUploadStrategy(FilePathEnum.AVATER.getPath(), avatar));
+        return Result.success(minIOService.uploadFile(avatar));
     }
 
     @PostMapping("/log")
@@ -101,7 +97,6 @@ public class HrRecordController {
         return Result.success(hrRecordService.getById(id));
     }
 
-    // 条件查询
     @GetMapping("/search")
     @ApiOperation(value = "条件查询")
     public Result<IPage<HrRecord>> search(HrRecordSearchDTO hrRecordSearchDTO) {

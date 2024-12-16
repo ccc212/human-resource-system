@@ -1,6 +1,6 @@
 package com.hrsys.interceptor;
 
-import com.hrsys.config.properties.JwtClaimsConstant;
+import com.hrsys.constant.JwtClaimsConstant;
 import com.hrsys.config.properties.JwtProperties;
 import com.hrsys.context.BaseContext;
 import com.hrsys.enums.StatusCodeEnum;

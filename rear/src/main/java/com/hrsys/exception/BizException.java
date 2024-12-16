@@ -7,7 +7,6 @@ import lombok.Getter;
 public class BizException extends RuntimeException {
 
     private final StatusCodeEnum statusCodeEnum;
-    private final Integer code;
 
     public BizException(String message) {
         this(StatusCodeEnum.FAIL, message);
@@ -20,6 +19,5 @@ public class BizException extends RuntimeException {
     public BizException(StatusCodeEnum statusCodeEnum, String message) {
         super(message);
         this.statusCodeEnum = statusCodeEnum;
-        this.code = statusCodeEnum.getCode();
     }
 }

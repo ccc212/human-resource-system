@@ -1,0 +1,11 @@
+hrsys:
+  datasource:
+    host: mysql2
+    port: 3306
+    username: root
+    password: ccc212
+
+minio:
+  endpoint: http://minio2:9000
+  accessKey: ccc212
+  secretKey: ccc212ccc212

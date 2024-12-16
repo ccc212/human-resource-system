@@ -2,7 +2,7 @@ package com.hrsys.controller.user;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hrsys.config.properties.JwtClaimsConstant;
+import com.hrsys.constant.JwtClaimsConstant;
 import com.hrsys.config.properties.JwtProperties;
 import com.hrsys.constant.MessageConstant;
 import com.hrsys.pojo.dto.UserAssignRoleDTO;

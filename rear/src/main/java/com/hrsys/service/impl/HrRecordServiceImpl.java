@@ -11,7 +11,6 @@ import com.hrsys.pojo.entity.HrRecord;
 import com.hrsys.mapper.HrRecordMapper;
 import com.hrsys.service.IHrRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hrsys.strategy.storage.StorageStrategyContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class HrRecordServiceImpl extends ServiceImpl<HrRecordMapper, HrRecord> implements IHrRecordService {
 
-    private final StorageStrategyContext storageStrategyContext;
     private final HrRecordMapper hrRecordMapper;
 
     @Override
