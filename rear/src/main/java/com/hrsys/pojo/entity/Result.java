@@ -43,6 +43,7 @@ public class Result<T> implements Serializable {
         return new Result<>(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getDesc(), msg);
     }
 
+
     public static Result<String> error(StatusCodeEnum statusCodeEnum) {
         return new Result<>(statusCodeEnum.getCode(), statusCodeEnum.getDesc(), statusCodeEnum.getDesc());
     }

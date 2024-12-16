@@ -1,0 +1,14 @@
+.employee-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.upload-photo {
+  width: 128px;
+  height: 128px;
+}
+
+.form-actions {
+  margin-top: 24px;
+  text-align: center;
+} 

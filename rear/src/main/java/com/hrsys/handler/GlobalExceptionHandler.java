@@ -4,7 +4,10 @@ import com.hrsys.pojo.entity.Result;
 import com.hrsys.enums.StatusCodeEnum;
 import com.hrsys.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,5 +49,10 @@ public class GlobalExceptionHandler {
     public Result<?> handleGenericException(Exception ex) {
         log.error("未捕获的异常：", ex);
         return Result.error(StatusCodeEnum.SERVER_ERROR);
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result<? > handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+   return Result.error(StatusCodeEnum. NOT_EXISTS );
+
     }
 }

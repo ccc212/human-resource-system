@@ -1,23 +1,28 @@
 package com.hrsys.pojo.entity;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import java.math.RoundingMode;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.hrsys.exception.BizException;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.hrsys.pojo.dao.SSitem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import javax.validation.Valid;
 
 /**
  * <p>
  * 薪酬标准表
  * </p>
  *
- * @author 
+ * @author
  * @since 2024-11-27
  */
 @Data
@@ -37,6 +42,7 @@ public class SalaryStandard implements Serializable {
     /**
      * 薪酬标准名称
      */
+
     private String name;
 
     /**
@@ -53,116 +59,129 @@ public class SalaryStandard implements Serializable {
      * 登记时间
      */
     private LocalDateTime registrationTime;
-
     /**
-     * 基本工资
+     * 复核人
      */
-    private BigDecimal baseSalary;
-
+    private String reviewer;
     /**
-     * 交通补助
+     * 薪酬项目列表
      */
-    private BigDecimal transportationAllowance;
-
-    /**
-     * 午餐补助
-     */
-    private BigDecimal lunchAllowance;
-
-    /**
-     * 通信补助
-     */
-    private BigDecimal communicationAllowance;
-
-    /**
-     * 养老保险
-     */
-    private BigDecimal pensionInsurance;
-
-    /**
-     * 医疗保险
-     */
-    private BigDecimal medicalInsurance;
-
-    /**
-     * 失业保险
-     */
-    private BigDecimal unemploymentInsurance;
-
-    /**
-     * 住房公积金
-     */
-    private BigDecimal housingFund;
+    private List<SSitem> items = new ArrayList<>();
 
     /**
      * 复核状态（0：未复核，1：已复核）
      */
-    private String reviewStatus;
+    private Enum reviewStatus;
 
     /**
      * 复核意见
      */
-    private String reviewComment;
+    private static final BigDecimal PENSION_RATE = new BigDecimal("0.08");
+    private static final BigDecimal MEDICAL_RATE = new BigDecimal("0.02");
+    private static final BigDecimal UNEMPLOYMENT_RATE = new BigDecimal("0.005");
+    private static final BigDecimal HOUSING_RATE = new BigDecimal("0.08");
+    private static final BigDecimal MEDICAL_BASE = new BigDecimal("3.00");
 
     /**
-     * 构建薪酬标准对象
-     *
-     * @param name 薪酬标准名称，不能为空
-     * @param creator 制定人，不能为空
-     * @param registrar 登记人，不能为空
-     * @param baseSalary 基本工资
-     * @param transportationAllowance 交通补贴
-     * @param lunchAllowance 午餐补贴
-     * @param communicationAllowance 通讯补贴
-     * @return 返回构建的SalaryStandard对象
-     * @throws IllegalArgumentException 如果薪酬标准名称、制定人或登记人为空，则抛出此异常
+     * 校验薪酬标准是否通过
      */
-    public static SalaryStandard build(String name, String creator, String registrar, BigDecimal baseSalary,
-                                       BigDecimal transportationAllowance, BigDecimal lunchAllowance, BigDecimal communicationAllowance) {
-        // 验证薪酬标准名称不为空
-        if (name == null || name.isEmpty()) {
-            throw new BizException("薪酬标准名称不能为空");
-        }
-        // 验证制定人不为空
-        if (creator == null || creator.isEmpty()) {
-            throw new BizException("制定人不能为空");
-        }
-        // 验证登记人不为空
-        if (registrar == null || registrar.isEmpty()) {
-            throw new BizException("登记人不能为空");
-        }
+    public boolean checkIsPass() {
+        try {
+            // 初始化薪酬项目并设置默认值
+            initializeItems();
 
-        // 计算五险一金
-        BigDecimal pensionInsurance = baseSalary.multiply(new BigDecimal("0.08")).setScale(2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal medicalInsurance = baseSalary.multiply(new BigDecimal("0.02")).add(new BigDecimal("3")).setScale(2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal unemploymentInsurance = baseSalary.multiply(new BigDecimal("0.005")).setScale(2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal housingFund = baseSalary.multiply(new BigDecimal("0.08")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            // 检查并计算薪酬项目金额
+            standardizeItems();
 
-        // 为补贴设置默认值
-        if (transportationAllowance == null) {
-            transportationAllowance = BigDecimal.ZERO;
-        }
-        if (lunchAllowance == null) {
-            lunchAllowance = BigDecimal.ZERO;
-        }
-        if (communicationAllowance == null) {
-            communicationAllowance = BigDecimal.ZERO;
-        }
+            // 保险金额计算
+            calculateInsurance();
 
-        // 构建并返回SalaryStandard对象
-        return new SalaryStandard()
-                .setName(name)
-                .setCreator(creator)
-                .setRegistrar(registrar)
-                .setRegistrationTime(LocalDateTime.now())
-                .setBaseSalary(baseSalary)
-                .setTransportationAllowance(transportationAllowance)
-                .setLunchAllowance(lunchAllowance)
-                .setCommunicationAllowance(communicationAllowance)
-                .setPensionInsurance(pensionInsurance)
-                .setMedicalInsurance(medicalInsurance)
-                .setUnemploymentInsurance(unemploymentInsurance)
-                .setHousingFund(housingFund);
+            return true; // 所有检查通过
+        } catch (ArithmeticException | NullPointerException e) {
+            // 捕获并记录常见异常
+            System.err.println("发生算术或空指针异常: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            // 捕获其他未知异常
+            System.err.println("发生未知异常: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * 验证基础字段
+     */
+
+
+    /**
+     * 初始化薪酬项目
+     */
+    private void initializeItems() {
+        if (items == null || items.isEmpty()) {
+            items = new ArrayList<>();
+            items.add(new SSitem("基本工资", BigDecimal.ZERO));
+            items.add(new SSitem("交通补助", BigDecimal.ZERO));
+            items.add(new SSitem("午餐补助", BigDecimal.ZERO));
+            items.add(new SSitem("通信补助", BigDecimal.ZERO));
+            items.add(new SSitem("养老保险", BigDecimal.ZERO));
+            items.add(new SSitem("医疗保险", BigDecimal.ZERO));
+            items.add(new SSitem("失业保险", BigDecimal.ZERO));
+            items.add(new SSitem("住房公积金", BigDecimal.ZERO));
+        }
+    }
+
+    /**
+     * 规范化项目金额
+     * 此方法遍历所有的SSitem对象，确保每个项目的账户金额要么被设置为零（如果原本为空），
+     * 要么被规范化为两位小数的格式，以确保数据的一致性和准确性
+     */
+    private void standardizeItems() {
+        for (SSitem item : items) {
+            // 检查项目账户金额是否为空
+            if (item.getAccount() == null) {
+                // 如果为空，则设置为零
+                item.setAccount(BigDecimal.ZERO);
+            } else {
+                // 如果不为空，则规范化为两位小数的格式
+                item.setAccount(item.getAccount().setScale(2, RoundingMode.HALF_UP));
+            }
+        }
+    }
+
+    /**
+     * 计算保险金额
+     */
+    private void calculateInsurance() {
+        BigDecimal baseSalary = getItemAmount("基本工资");
+
+        setItemAmount("养老保险", baseSalary.multiply(PENSION_RATE).setScale(2, RoundingMode.HALF_UP));
+        setItemAmount("医疗保险", baseSalary.multiply(MEDICAL_RATE).add(MEDICAL_BASE).setScale(2, RoundingMode.HALF_UP));
+        setItemAmount("失业保险", baseSalary.multiply(UNEMPLOYMENT_RATE).setScale(2, RoundingMode.HALF_UP));
+        setItemAmount("住房公积金", baseSalary.multiply(HOUSING_RATE).setScale(2, RoundingMode.HALF_UP));
+    }
+
+    /**
+     * 设置项目金额
+     */
+    public void setItemAmount(String name, BigDecimal amount) {
+        for (SSitem item : items) {
+            if (item.getName().equals(name)) {
+                item.setAccount(amount);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 获取项目金额
+     */
+    public BigDecimal getItemAmount(String name) {
+        for (SSitem item : items) {
+            if (item.getName().equals(name)) {
+                return item.getAccount();
+            }
+        }
+        return BigDecimal.ZERO;
     }
 
 }
