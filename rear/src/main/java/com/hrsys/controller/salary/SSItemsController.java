@@ -1,5 +1,7 @@
 package com.hrsys.controller.salary;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hrsys.Gobal.GlobalVariables;
 import com.hrsys.enums.StatusCodeEnum;
 import com.hrsys.pojo.dao.SSItems;
 import com.hrsys.service.SSItemsService;
@@ -21,7 +23,8 @@ public class SSItemsController {
 
     @Autowired
     private SSItemsService ssItemsService;
-
+    @Autowired
+    private GlobalVariables globalVariables;
     // 增加一个项目
     @PostMapping
     public ResponseEntity<?> createItem(@RequestBody SSItems item) {
@@ -34,6 +37,9 @@ public class SSItemsController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        finally {
+            updateVariables();
         }
     }
 
@@ -61,6 +67,7 @@ public class SSItemsController {
         } catch (Exception e) {
             return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     // 更新项目
@@ -84,6 +91,9 @@ public class SSItemsController {
         } catch (Exception e) {
             return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        finally {
+            updateVariables();
+        }
     }
 
     // 删除项目
@@ -99,5 +109,17 @@ public class SSItemsController {
         } catch (Exception e) {
             return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        finally {
+            updateVariables();
+        }
+
+    }
+    public void updateVariables() {
+        // 从数据库或其他服务加载新数据
+        QueryWrapper<SSItems> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_fixed", true);
+        List<SSItems> ssItems= ssItemsService.list(queryWrapper);
+        globalVariables.set("ssItems", ssItems);
+
     }
 }

@@ -71,14 +71,6 @@ public class SalaryStandard implements Serializable {
      */
     private Enum reviewStatus;
 
-    /**
-     * 复核意见
-     */
-    private static final BigDecimal PENSION_RATE = new BigDecimal("0.08");
-    private static final BigDecimal MEDICAL_RATE = new BigDecimal("0.02");
-    private static final BigDecimal UNEMPLOYMENT_RATE = new BigDecimal("0.005");
-    private static final BigDecimal HOUSING_RATE = new BigDecimal("0.08");
-    private static final BigDecimal MEDICAL_BASE = new BigDecimal("3.00");
 
     /**
      * 校验薪酬标准是否通过
@@ -91,8 +83,6 @@ public class SalaryStandard implements Serializable {
             // 检查并计算薪酬项目金额
             standardizeItems();
 
-            // 保险金额计算
-            calculateInsurance();
 
             return true; // 所有检查通过
         } catch (ArithmeticException | NullPointerException e) {
@@ -149,14 +139,7 @@ public class SalaryStandard implements Serializable {
     /**
      * 计算保险金额
      */
-    private void calculateInsurance() {
-        BigDecimal baseSalary = getItemAmount("基本工资");
 
-        setItemAmount("养老保险", baseSalary.multiply(PENSION_RATE).setScale(2, RoundingMode.HALF_UP));
-        setItemAmount("医疗保险", baseSalary.multiply(MEDICAL_RATE).add(MEDICAL_BASE).setScale(2, RoundingMode.HALF_UP));
-        setItemAmount("失业保险", baseSalary.multiply(UNEMPLOYMENT_RATE).setScale(2, RoundingMode.HALF_UP));
-        setItemAmount("住房公积金", baseSalary.multiply(HOUSING_RATE).setScale(2, RoundingMode.HALF_UP));
-    }
 
     /**
      * 设置项目金额
