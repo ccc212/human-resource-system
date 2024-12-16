@@ -1,0 +1,71 @@
+.salary-standard-container {
+  padding: 20px;
+  background: #fff;
+}
+
+.salary-standard-header {
+  margin-bottom: 20px;
+  border: 1px solid #d9d9d9;
+  padding: 15px;
+  background: #f5f5f5;
+}
+
+.header-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.header-row:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  width: 100px;
+  text-align: right;
+  padding-right: 10px;
+  color: #666;
+}
+
+.value {
+  width: 200px;
+  margin-right: 20px;
+}
+
+.salary-standard-table {
+  border: 1px solid #d9d9d9;
+}
+
+.salary-standard-table .ant-table-thead > tr > th {
+  background: #e8f5e9;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+.salary-standard-table .ant-table-tbody > tr.even-row {
+  background: #f5f5f5;
+}
+
+.salary-standard-table .ant-table-tbody > tr.odd-row {
+  background: #ffffff;
+}
+
+.salary-standard-table .ant-table-tbody > tr > td {
+  text-align: center;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+/* 添加表格边框 */
+.salary-standard-table .ant-table {
+  border: 1px solid #d9d9d9;
+}
+
+.salary-standard-table .ant-table-cell {
+  border-right: 1px solid #d9d9d9;
+}
+
+/* 表头样式 */
+.header-cell {
+  background: #e8f5e9 !important;
+  font-weight: bold !important;
+} 

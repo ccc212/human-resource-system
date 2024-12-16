@@ -53,11 +53,7 @@ public class SalaryPaymentController {
         return Result.success();
     }
 
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "删除")
-    public Result<?> delete(@PathVariable @NotNull Long id) {
-        salaryPaymentService.removeById(id);
-        return Result.success();
-    }
+
+
 
 }

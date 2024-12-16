@@ -15,4 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SalaryStandardMapper extends BaseMapper<SalaryStandard> {
 
+
+    public  Long saveUsingGeneratedKeys(SalaryStandard salaryStandard);
 }

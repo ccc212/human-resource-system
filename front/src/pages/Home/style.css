@@ -1,0 +1,149 @@
+/* 整体布局样式 */
+.site-layout {
+  min-height: 100vh;
+}
+
+/* Logo样式 */
+.logo {
+  height: 64px;
+  padding: 16px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 1px;
+}
+
+/* 侧边栏样式 */
+.site-sider {
+  box-shadow: 2px 0 8px 0 rgba(29,35,41,.05);
+}
+
+/* 头部样式 */
+.site-header {
+  padding: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
+.welcome-text {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* 内容区域样式 */
+.site-content {
+  margin: 24px 16px;
+  padding: 24px;
+  background: #fff;
+  min-height: 280px;
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+  .site-content {
+    margin: 16px 8px;
+    padding: 16px;
+  }
+  
+  .header-content {
+    padding: 0 16px;
+  }
+}
+
+/* Tab样式优化 */
+.ant-tabs-card .ant-tabs-content {
+  margin-top: -16px;
+}
+
+.ant-tabs-card .ant-tabs-tab {
+  background: transparent;
+  border-color: transparent;
+}
+
+.ant-tabs-card .ant-tabs-tab-active {
+  background: #fff;
+  border-color: #f0f0f0;
+}
+
+/* 下拉菜单样式 */
+.ant-dropdown-menu {
+  padding: 4px 0;
+}
+
+.ant-dropdown-menu-item {
+  padding: 8px 16px;
+}
+
+/* 头像样式 */
+.ant-avatar {
+  background: #1890ff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ant-avatar:hover {
+  opacity: 0.85;
+}
+
+/* 菜单项样式 */
+.ant-menu-item {
+  margin: 4px 0;
+}
+
+.ant-menu-item:active {
+  background: #1890ff;
+}
+
+/* 内容区域的卡片样式 */
+.content-card {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
+}
+
+/* 表格样式优化 */
+.ant-table-wrapper {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+/* 按钮样式优化 */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* 表单布局优化 */
+.form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* 响应式表单布局 */
+@media screen and (max-width: 576px) {
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .ant-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+} 
