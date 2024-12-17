@@ -2,8 +2,6 @@ package com.hrsys.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.hrsys.pojo.dto.SSReviewDTO;
 import com.hrsys.pojo.dto.SSSearchDTO;
@@ -11,11 +9,9 @@ import com.hrsys.pojo.entity.SalaryStandard;
 import com.hrsys.mapper.SalaryStandardMapper;
 import com.hrsys.service.ISalaryStandardService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Queue;
 
 /**
  * <p>
@@ -29,9 +25,7 @@ import java.util.Queue;
 public class SalaryStandardServiceImpl extends ServiceImpl<SalaryStandardMapper, SalaryStandard> implements ISalaryStandardService {
     @Override
     public String createSalaryStandard(SalaryStandard salaryStandard) {
-        if (!salaryStandard.checkIsPass()) {
-            return "不符合规范的薪酬标准";
-        }
+
         SalaryStandard ss_to_insert = new SalaryStandard();
         BeanUtil.copyProperties(salaryStandard, ss_to_insert);
         baseMapper.saveUsingGeneratedKeys(ss_to_insert);
@@ -67,7 +61,7 @@ public class SalaryStandardServiceImpl extends ServiceImpl<SalaryStandardMapper,
         }
 
         if (ssd.getKeyword() != null) {
-            lambdaQueryWrapper.like(SalaryStandard::getName, ssd.getKeyword())
+            lambdaQueryWrapper.like(SalaryStandard::getSalaryStandardName, ssd.getKeyword())
                     .like(SalaryStandard::getCreator, ssd.getKeyword())
                     .like(SalaryStandard::getRegistrar, ssd.getKeyword())
                     .like(SalaryStandard::getReviewer, ssd.getKeyword());

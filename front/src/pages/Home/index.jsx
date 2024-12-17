@@ -152,7 +152,10 @@ const Home = () => {
       label: '薪资项目管理',
       children: <SalaryItems />
     }
-  ];
+  ].map(item => ({
+    ...item,
+    label: typeof item.label === 'object' ? item.label.name || item.label : item.label
+  }));
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

@@ -26,6 +26,7 @@
         <druid>1.2.1</druid>
         <minio>8.5.12</minio>
         <knife4j>3.0.3</knife4j>
+        <mpj>1.5.2</mpj>
     </properties>
 
     <dependencies>
@@ -63,7 +64,11 @@
             <version>${mysql}</version>
             <scope>runtime</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.yulichang</groupId>
+            <artifactId>mybatis-plus-join-boot-starter</artifactId>
+            <version>${mpj}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.baomidou</groupId>

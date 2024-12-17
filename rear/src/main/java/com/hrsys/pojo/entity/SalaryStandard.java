@@ -1,15 +1,17 @@
 package com.hrsys.pojo.entity;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hrsys.enums.ReviewStatus;
 import com.hrsys.pojo.dao.SSitemDetailDao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,22 +28,19 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("salary_standard")
+
 public class SalaryStandard implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 薪酬标准编号
-     */
-    @TableId(value = "standard_id", type = IdType.AUTO)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long standardId;
 
     /**
      * 薪酬标准名称
      */
 
-    private String name;
+    private String salaryStandardName;
 
     /**
      * 制定人
@@ -52,117 +51,36 @@ public class SalaryStandard implements Serializable {
      * 登记人
      */
     private String registrar;
-
-    /**
-     * 登记时间
-     */
-    private LocalDateTime registrationTime;
     /**
      * 复核人
      */
     private String reviewer;
     /**
+     * 登记时间
+     */
+    private LocalDateTime registrationTime;
+
+
+    private ReviewStatus reviewStatus;
+    /**
      * 薪酬项目列表
      */
     private List<SSitemDetailDao> items = new ArrayList<>();
 
+    public void setRegistrationTime(Date date) {
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        this.registrationTime = localDate.atStartOfDay();
+
+    }
+    public void setRegistrationTime(LocalDateTime date) {
+    this.registrationTime = date;
+
+    }
+
     /**
      * 复核状态（0：未复核，1：已复核）
      */
-    private Enum reviewStatus;
 
 
-    /**
-     * 校验薪酬标准是否通过
-     */
-    public boolean checkIsPass() {
-        try {
-            // 初始化薪酬项目并设置默认值
-            initializeItems();
-
-            // 检查并计算薪酬项目金额
-            standardizeItems();
-
-
-            return true; // 所有检查通过
-        } catch (ArithmeticException | NullPointerException e) {
-            // 捕获并记录常见异常
-            System.err.println("发生算术或空指针异常: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            // 捕获其他未知异常
-            System.err.println("发生未知异常: " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * 验证基础字段
-     */
-
-
-    /**
-     * 初始化薪酬项目
-     */
-    private void initializeItems() {
-        if (items == null || items.isEmpty()) {
-            items = new ArrayList<>();
-            items.add(new SSitemDetailDao("基本工资", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("交通补助", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("午餐补助", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("通信补助", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("养老保险", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("医疗保险", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("失业保险", BigDecimal.ZERO));
-            items.add(new SSitemDetailDao("住房公积金", BigDecimal.ZERO));
-        }
-    }
-
-    /**
-     * 规范化项目金额
-     * 此方法遍历所有的SSitem对象，确保每个项目的账户金额要么被设置为零（如果原本为空），
-     * 要么被规范化为两位小数的格式，以确保数据的一致性和准确性
-     */
-    private void standardizeItems() {
-        for (SSitemDetailDao item : items) {
-            // 检查项目账户金额是否为空
-            if (item.getAccount() == null) {
-                // 如果为空，则设置为零
-                item.setAccount(BigDecimal.ZERO);
-            } else {
-                // 如果不为空，则规范化为两位小数的格式
-                item.setAccount(item.getAccount().setScale(2, RoundingMode.HALF_UP));
-            }
-        }
-    }
-
-    /**
-     * 计算保险金额
-     */
-
-
-    /**
-     * 设置项目金额
-     */
-    public void setItemAmount(String name, BigDecimal amount) {
-        for (SSitemDetailDao item : items) {
-            if (item.getName().equals(name)) {
-                item.setAccount(amount);
-                break;
-            }
-        }
-    }
-
-    /**
-     * 获取项目金额
-     */
-    public BigDecimal getItemAmount(String name) {
-        for (SSitemDetailDao item : items) {
-            if (item.getName().equals(name)) {
-                return item.getAccount();
-            }
-        }
-        return BigDecimal.ZERO;
-    }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class StartupEventListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -26,6 +28,9 @@ public class StartupEventListener implements ApplicationListener<ContextRefreshe
         QueryWrapper<SSItems> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_fixed", true);
         List<SSItems>ssItems= ssItemsMapper.selectList(queryWrapper);
+        Map<String, SSItems> ssItemsMap = ssItems.stream()
+                .collect(Collectors.toMap(SSItems::getItemName, item -> item));
+
         globalVariables.set("ssItems", ssItems);
 
         }
