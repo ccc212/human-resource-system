@@ -77,9 +77,13 @@ const SalaryItems = () => {
   };
 
   // 处理模态框确认
-  const handleModalOk = async () => {
+  const handleModalOk = async (e) => {
+    // 阻止表单默认提交行为
+    e && e.preventDefault();
+    
     try {
       const values = await form.validateFields();
+      
       if (editingId) {
         const updatedItem = await salaryItemsAPI.updateItem(editingId, values);
         if (updatedItem) {
@@ -91,8 +95,6 @@ const SalaryItems = () => {
               item.itemId === editingId ? { ...item, ...values } : item
             )
           );
-          // 防抖更新
-          debouncedFetchItems();
         } else {
           message.error('更新失败');
         }
@@ -103,13 +105,16 @@ const SalaryItems = () => {
           setIsModalVisible(false);
           // 乐观更新：立即添加到列表
           setItems(prevItems => [...prevItems, newItem]);
-          // 防抖更新
-          debouncedFetchItems();
         } else {
           message.error('添加失败');
         }
       }
+      
+      // 成功后重新获取列表
+      await fetchItems();
+      
     } catch (error) {
+      console.error('操作失败:', error);
       message.error(editingId ? '更新失败' : '添加失败');
     }
   };
@@ -184,6 +189,7 @@ const SalaryItems = () => {
         open={isModalVisible}
         onOk={handleModalOk}
         onCancel={() => setIsModalVisible(false)}
+        destroyOnClose
       >
         <Form
           form={form}
@@ -192,6 +198,7 @@ const SalaryItems = () => {
             isFixed: false,
             rate: 1
           }}
+          onFinish={handleModalOk}
         >
           <Form.Item
             name="itemName"

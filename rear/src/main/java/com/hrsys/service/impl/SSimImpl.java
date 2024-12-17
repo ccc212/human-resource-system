@@ -76,5 +76,7 @@ public class SSimImpl {
     }
 
 
-
+    public boolean updateSalaryStandard(SalaryStandard salaryStandard) {
+        return false;
+    }
 }

@@ -67,11 +67,7 @@ public class SalaryStandard implements Serializable {
      */
     private List<SSitemDetailDao> items = new ArrayList<>();
 
-    public void setRegistrationTime(Date date) {
-        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        this.registrationTime = localDate.atStartOfDay();
 
-    }
     public void setRegistrationTime(LocalDateTime date) {
     this.registrationTime = date;
 

@@ -40,6 +40,7 @@ import java.util.Map;
 @RequiredArgsConstructor//自动注入构造类
 @Api(tags = "薪酬标准管理")
 @Validated
+@CrossOrigin
 public class SalaryStandardController {
 
     @Autowired
@@ -54,10 +55,44 @@ public class SalaryStandardController {
     @GetMapping("/fixed-items")
     @ApiOperation("获取固定薪酬项目")
     public ResponseEntity<List<SSItems>> getFixedItems() {
-        Map<String, SSItems> fixed_items = (Map) globalVariables.get("ssItems");
+        Map<String, SSItems> fixed_items = (Map) globalVariables.get("fixed_ssItems");
 //        fixed_items转换成list
         List<SSItems> fixedItems = fixed_items.values().stream().toList();
         return ResponseEntity.ok(fixedItems);
+    }
+    @GetMapping("/unfixed-items")
+    @ApiOperation("获取非固定薪酬项目")
+    public ResponseEntity<List<SSItems>> getUnFixedItems() {
+        Map<String, SSItems> fixed_items = (Map) globalVariables.get("unfixed_ssItems");
+//        fixed_items转换成list
+        List<SSItems> fixedItems = fixed_items.values().stream().toList();
+        return ResponseEntity.ok(fixedItems);
+    }
+    @PutMapping("/update/{id}")
+    @ApiOperation("更新薪酬标准")
+    public ResponseEntity<?> updateSalaryStandard(@RequestBody @Valid SalaryStandard salaryStandard, @PathVariable Long id) {
+        try {
+            Map<String, SSItems> fixed_items = (Map) globalVariables.get("ssItems");
+            List<SSitemDetailDao> sSitemDetailDaos = salaryStandard.getItems();
+            // 获取基本工资
+            BigDecimal baseSalaryAccount = getBaseSalaryAccount(fixed_items, sSitemDetailDaos);
+            if (baseSalaryAccount == null) {
+
+                return new ResponseEntity<>("基本工资不存在", HttpStatus.NOT_FOUND);
+            }
+            // 验证每个项目的金额是否符合基本工资的比率
+            if (!validateItemAccounts(fixed_items, sSitemDetailDaos, baseSalaryAccount)) {
+
+                return new ResponseEntity<>("项目金额不符合基本工资的比率", HttpStatus.CONFLICT);
+            }
+            // 更新数据
+            boolean result = sSim.updateSalaryStandard(salaryStandard);
+            return  ResponseEntity.ok(StatusCodeEnum.SUCCESS);
+        }catch (Exception e) {
+            // 记录异常信息
+            e.printStackTrace(); // 可以替换为日志框架
+            return new ResponseEntity<>("更新失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @PostMapping("/add")
     @ApiOperation("新增薪酬标准")

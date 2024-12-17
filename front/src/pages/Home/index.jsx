@@ -187,6 +187,7 @@ const Home = () => {
             activeKey={activeTab} 
             onChange={setActiveTab} 
             type="card"
+            destroyInactiveTabPane
             items={tabItems}
           />
           <Outlet />

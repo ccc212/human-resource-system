@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 const Login = lazy(() => import('../pages/Login'));
 const Home = lazy(() => import('../pages/Home'));
 const NotFound = lazy(() => import('../pages/404'));
-const SalaryStandardDetail = lazy(() => import('../pages/Home/components/SalaryStandard/Detail'));
+
 
 const routes = [
   {
@@ -17,8 +17,7 @@ const routes = [
     element: <Home />,
     children: [
       {
-        path: 'salary-standard/detail/:id',
-        element: <SalaryStandardDetail />
+
       }
     ]
   },
