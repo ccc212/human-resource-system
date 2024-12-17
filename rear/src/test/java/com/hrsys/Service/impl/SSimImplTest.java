@@ -48,7 +48,7 @@ private GlobalVariables globalVariables;
         salaryStandard.setCreator("Test Creator");
         salaryStandard.setRegistrar("Test Registrar");
         salaryStandard.setReviewer("Test Reviewer");
-        salaryStandard.setRegistrationTime(new Date());
+
 
         // 准备 SalaryStandard 关联的 items
 

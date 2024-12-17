@@ -1,55 +1,52 @@
-import request from '../request';
+import request from '../interceptors';
 
-// React项目中使用 REACT_APP_ 前缀
-const API_PATH = process.env.REACT_APP_API_URL || '/api';
+// 薪酬标准相关接口
+export const salaryStandardAPI = {
+  // 获取所有薪酬标准
+  getAllStandards: () => {
+    return request.get('/salarystrandary/getAll');
+  },
+  
+  // 获取固定薪酬项目
+  getFixedItems: () => {
+    return request.get('/salarystrandary/fixed-items');
+  },
+  getUnFixedItems: () => {
+    return request.get('/salarystrandary/unfixed-items');
+  },
+  // 新增薪酬标准
+  addSalaryStandard: (data) => {
+    return request.post('/salarystrandary/add', data);
+  }
+};
 
 // 薪资项目相关接口
 export const salaryItemsAPI = {
   // 获取所有薪资项目
   getItems: () => {
-    return request.get(`${API_PATH}/ssitems`);
-  },
-  
-  // 根据ID获取薪资项目
-  getItemById: (id) => {
-    return request.get(`${API_PATH}/ssitems/${id}`);
+    return request.get('/ssitems');
   },
   
   // 添加薪资项目
   addItem: (data) => {
-    return request.post(`${API_PATH}/ssitems`, data);
+    return request.post('/ssitems', data);
   },
   
   // 更新薪资项目
   updateItem: (id, data) => {
-    return request.put(`${API_PATH}/ssitems/${id}`, data);
+    return request.put(`/ssitems/${id}`, data);
   },
   
   // 删除薪资项目
   deleteItem: (id) => {
-    return request.delete(`${API_PATH}/ssitems/${id}`);
+    return request.delete(`/ssitems/${id}`);
   }
 };
 
-// 薪资标准相关接口
-export const salaryStandardAPI = {
-  getList: () => {
-    return request.get(`${API_PATH}/salary-standards`);
-  },
-  
-  getDetail: (id) => {
-    return request.get(`${API_PATH}/salary-standards/${id}`);
-  },
-  
-  create: (data) => {
-    return request.post(`${API_PATH}/salary-standards`, data);
-  },
-  
-  update: (id, data) => {
-    return request.put(`${API_PATH}/salary-standards/${id}`, data);
-  },
-  
-  delete: (id) => {
-    return request.delete(`${API_PATH}/salary-standards/${id}`);
+// 薪酬发放相关接口
+export const salaryPaymentAPI = {
+  // 获取薪酬发放列表
+  getPaymentList: (params) => {
+    return request.get('/salarypayment/search', { params });
   }
-}; 
+};

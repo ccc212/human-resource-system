@@ -25,15 +25,25 @@ public class StartupEventListener implements ApplicationListener<ContextRefreshe
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         // 从数据库加载数据
-//        QueryWrapper<SSItems> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("is_fixed", true);
-//        List<SSItems>ssItems= ssItemsMapper.selectList(queryWrapper);
-//        Map<String, SSItems> ssItemsMap = ssItems.stream()
-//                .collect(Collectors.toMap(SSItems::getItemName, item -> item));
-//
-//        globalVariables.set("ssItems", ssItems);
+        QueryWrapper<SSItems> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_fixed", true);
+        List<SSItems>fixed_ssItems= ssItemsMapper.selectList(queryWrapper);
+        QueryWrapper<SSItems> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper.eq("is_fixed", false);
+        List<SSItems>unfixed_ssItems= ssItemsMapper.selectList(queryWrapper2);
 
-        }
+
+
+        Map<String, SSItems> ssItemsMap = fixed_ssItems.stream()
+                .collect(Collectors.toMap(SSItems::getItemName, item -> item));
+
+        globalVariables.set("fixed_ssItems", ssItemsMap);
+        Map<String, SSItems> ssItemsMap2 = unfixed_ssItems.stream()
+                .collect(Collectors.toMap(SSItems::getItemName, item -> item));
+
+        globalVariables.set("unfixed_ssItems", ssItemsMap2);
+
 
     }
+}
 
