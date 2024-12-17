@@ -8,6 +8,7 @@ public class BizException extends RuntimeException {
 
     private final StatusCodeEnum statusCodeEnum;
 
+
     public BizException(String message) {
         this(StatusCodeEnum.FAIL, message);
     }
@@ -19,5 +20,6 @@ public class BizException extends RuntimeException {
     public BizException(StatusCodeEnum statusCodeEnum, String message) {
         super(message);
         this.statusCodeEnum = statusCodeEnum;
+
     }
 }

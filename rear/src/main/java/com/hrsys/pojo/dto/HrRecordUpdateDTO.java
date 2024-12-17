@@ -17,11 +17,6 @@ public class HrRecordUpdateDTO {
     private Long recordId;
 
     /**
-     * 用户ID
-     */
-    private Long userId;
-
-    /**
      * 职称ID
      */
     private Long titleId;

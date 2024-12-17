@@ -33,11 +33,6 @@ public class HrRecord implements Serializable {
     private Long recordId;
 
     /**
-     * 用户ID
-     */
-    private Long userId;
-
-    /**
      * I级机构ID
      */
     private Long orgId1;

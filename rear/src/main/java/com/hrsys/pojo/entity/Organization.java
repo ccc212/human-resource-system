@@ -44,5 +44,6 @@ public class Organization implements Serializable {
     @NotNull(message = "父级机构ID不能为空")
     private Long parentId;
 
-
+    @NotNull(message = "机构级别不能为空")
+    private Integer level;
 }

@@ -18,14 +18,52 @@ CREATE TABLE organization
 (
     org_id    BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '机构ID',
     org_name  VARCHAR(50) COMMENT '机构名称',
-    parent_id BIGINT DEFAULT 0
+    parent_id BIGINT DEFAULT 0,
+    level     TINYINT
 ) COMMENT '组织机构表';
+
+-- 插入一级机构
+INSERT INTO organization (org_name, parent_id, level) VALUES ('总部', 0, 1);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('分公司A', 0, 1);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('分公司B', 0, 1);
+
+-- 插入二级机构
+INSERT INTO organization (org_name, parent_id, level) VALUES ('研发中心', 1, 2);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('市场部', 1, 2);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('财务部', 1, 2);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('销售部', 2, 2);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('人力资源部', 2, 2);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('技术支持部', 3, 2);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('行政部', 3, 2);
+
+-- 插入三级机构
+INSERT INTO organization (org_name, parent_id, level) VALUES ('软件开发部', 4, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('硬件开发部', 4, 3);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('市场推广部', 5, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('客户关系部', 5, 3);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('会计部', 6, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('审计部', 6, 3);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('国内销售部', 7, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('国际销售部', 7, 3);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('招聘部', 8, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('培训部', 8, 3);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('网络支持部', 9, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('现场支持部', 9, 3);
+
+INSERT INTO organization (org_name, parent_id, level) VALUES ('行政管理部', 10, 3);
+INSERT INTO organization (org_name, parent_id, level) VALUES ('后勤保障部', 10, 3);
 
 DROP TABLE IF EXISTS hr_record;
 CREATE TABLE hr_record
 (
     record_id              BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '档案ID',
-    user_id                BIGINT COMMENT '用户ID',
     org_id1               BIGINT COMMENT 'I级机构ID',
     org_id2               BIGINT COMMENT 'II级机构ID',
     org_id3               BIGINT COMMENT 'III级机构ID',
@@ -74,18 +112,18 @@ CREATE TABLE hr_record
 ) COMMENT '人力资源档案表';
 
 -- 插入示例数据
-INSERT INTO hr_record (record_id, user_id, org_id1, org_id2, org_id3, name, gender, email, phone, registration_time, registrar, position_id, title_id)
+INSERT INTO hr_record (record_id, org_id1, org_id2, org_id3, name, gender, email, phone, registration_time, registrar, position_id, title_id)
 VALUES 
-(202401010101, 1, 1, 1, 1, '张三', '0', 'zhangsan@example.com', '13800138001', '2024-01-01 09:00:00', 'admin', 1, 1),
-(202402020202, 2, 2, 2, 2, '李四', '0', 'lisi@example.com', '13800138002', '2024-02-01 09:30:00', 'admin', 2, 2),
-(202403030303, 3, 3, 3, 3, '王五', '1', 'wangwu@example.com', '13800138003', '2024-03-01 10:00:00', 'admin', 3, 1),
-(202404040404, 4, 1, 2, 1, '赵六', '0', 'zhaoliu@example.com', '13800138004', '2024-04-01 10:30:00', 'admin', 1, 3),
-(202405050505, 5, 2, 1, 2, '孙七', '1', 'sunqi@example.com', '13800138005', '2024-05-01 11:00:00', 'admin', 2, 2),
-(202406060606, 6, 3, 2, 3, '周八', '0', 'zhouba@example.com', '13800138006', '2024-06-01 11:30:00', 'admin', 3, 1),
-(202407070707, 7, 1, 3, 1, '吴九', '1', 'wujiu@example.com', '13800138007', '2024-07-01 12:00:00', 'admin', 1, 2),
-(202408080808, 8, 2, 3, 2, '郑十', '0', 'zhengshi@example.com', '13800138008', '2024-08-01 12:30:00', 'admin', 2, 3),
-(202409090909, 9, 3, 1, 3, '钱十一', '1', 'qianshiyi@example.com', '13800138009', '2024-09-01 13:00:00', 'admin', 3, 1),
-(202410101010, 10, 1, 2, 2, '陈十二', '0', 'chenshier@example.com', '13800138010', '2024-10-01 13:30:00', 'admin', 1, 2);
+(202401010101, 1, 4, 11, '张三', '0', 'zhangsan@example.com', '13800138001', '2024-01-01 09:00:00', 'admin', 1, 1),
+(202402020202, 2, 7, 17, '李四', '0', 'lisi@example.com', '13800138002', '2024-02-01 09:30:00', 'admin', 2, 2),
+(202403030303, 3, 9, 21, '王五', '1', 'wangwu@example.com', '13800138003', '2024-03-01 10:00:00', 'admin', 3, 1),
+(202404040404, 1, 5, 13, '赵六', '0', 'zhaoliu@example.com', '13800138004', '2024-04-01 10:30:00', 'admin', 1, 3),
+(202405050505, 2, 8, 19, '孙七', '1', 'sunqi@example.com', '13800138005', '2024-05-01 11:00:00', 'admin', 2, 2),
+(202406060606, 3, 10, 23, '周八', '0', 'zhouba@example.com', '13800138006', '2024-06-01 11:30:00', 'admin', 3, 1),
+(202407070707, 1, 6, 15, '吴九', '1', 'wujiu@example.com', '13800138007', '2024-07-01 12:00:00', 'admin', 1, 2),
+(202408080808, 2, 7, 18, '郑十', '0', 'zhengshi@example.com', '13800138008', '2024-08-01 12:30:00', 'admin', 2, 3),
+(202409090909, 3, 9, 22, '钱十一', '1', 'qianshiyi@example.com', '13800138009', '2024-09-01 13:00:00', 'admin', 3, 1),
+(202410101010, 1, 4, 12, '陈十二', '0', 'chenshier@example.com', '13800138010', '2024-10-01 13:30:00', 'admin', 1, 2);
 
 DROP TABLE IF EXISTS salary_standard;
 CREATE TABLE salary_standard

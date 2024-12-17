@@ -1,11 +1,16 @@
 package com.hrsys.pojo.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class HrRecordSearchDTO {
 
@@ -23,7 +28,9 @@ public class HrRecordSearchDTO {
 
     private Long positionId;
 
-    private LocalDateTime begin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate begin;
 
-    private LocalDateTime end;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate end;
 }

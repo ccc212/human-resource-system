@@ -1,5 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hrsys.mapper.HrRecordMapper">
+    <select id="search" resultType="com.hrsys.pojo.vo.HrRecordListVO"
+            parameterType="com.hrsys.pojo.dto.HrRecordSearchDTO">
+        SELECT
+        hr_record.record_id,
+        org1.org_name org_name1,
+        org2.org_name org_name2,
+        org3.org_name org_name3,
+        position.position_name,
+        hr_record.name,
+        hr_record.gender
+        FROM
+        hr_record
+        LEFT JOIN organization org1 ON hr_record.org_id1 = org1.org_id
+        LEFT JOIN organization org2 ON hr_record.org_id2 = org2.org_id
+        LEFT JOIN organization org3 ON hr_record.org_id3 = org3.org_id
+        LEFT JOIN position ON hr_record.position_id = position.position_id
+        LEFT JOIN position_categorie category ON hr_record.category_id = category.category_id
+        LEFT JOIN salary_standard ON hr_record.salary_standard_id = salary_standard.standard_id
+        <where>
+            <if test="hrRecordSearchDTO.orgId1 != null">
+                AND org1.org_id = #{hrRecordSearchDTO.orgId1}
+            </if>
+            <if test="hrRecordSearchDTO.orgId2 != null">
+                AND org2.org_id = #{hrRecordSearchDTO.orgId2}
+            </if>
+            <if test="hrRecordSearchDTO.orgId3 != null">
+                AND org3.org_id = #{hrRecordSearchDTO.orgId3}
+            </if>
+            <if test="hrRecordSearchDTO.categoryId != null">
+                AND hr_record.category_id = #{hrRecordSearchDTO.categoryId}
+            </if>
+            <if test="hrRecordSearchDTO.positionId != null">
+                AND hr_record.position_id = #{hrRecordSearchDTO.positionId}
+            </if>
+            <if test="hrRecordSearchDTO.begin != null and hrRecordSearchDTO.end != null">
+                AND hr_record.registration_time BETWEEN #{hrRecordSearchDTO.begin} AND #{hrRecordSearchDTO.end}
+            </if>
+        </where>
+        LIMIT #{hrRecordSearchDTO.current},#{hrRecordSearchDTO.pageSize}
+    </select>
 
+    <select id="getHrRecordById" resultType="com.hrsys.pojo.vo.HrRecordListVO" parameterType="java.lang.Long">
+        SELECT
+        hr_record.record_id,
+        org1.org_name org_name1,
+        org2.org_name org_name2,
+        org3.org_name org_name3,
+        position.position_name,
+        category.category_name,
+        title.title_name,
+        hr_record.name,
+        hr_record.gender,
+        hr_record.email,
+        hr_record.phone,
+        hr_record.qq,
+        hr_record.mobile,
+        hr_record.address,
+        hr_record.postal_code,
+        hr_record.nationality,
+        hr_record.birthplace,
+        hr_record.birthdate,
+        ethnicitie.ethnicity_name,
+        hr_record.religion,
+        hr_record.political_affiliation,
+        hr_record.id_number,
+        hr_record.social_security_number,
+        hr_record.age,
+        education.education_name,
+        hr_record.major,
+        salary_standard.name,
+        hr_record.bank_name,
+        hr_record.account_number,
+        hr_record.skills,
+        hr_record.hobbies,
+        hr_record.personal_history,
+        hr_record.family_info,
+        hr_record.remarks,
+        hr_record.photo_url,
+        hr_record.registrar,
+        hr_record.registration_time
+        FROM
+        hr_record
+        LEFT JOIN organization org1 ON hr_record.org_id1 = org1.org_id
+        LEFT JOIN organization org2 ON hr_record.org_id2 = org2.org_id
+        LEFT JOIN organization org3 ON hr_record.org_id3 = org3.org_id
+        LEFT JOIN position ON hr_record.position_id = position.position_id
+        LEFT JOIN position_categorie category ON hr_record.category_id = category.category_id
+        LEFT JOIN title ON hr_record.title_id = title.title_id
+        LEFT JOIN education ON hr_record.education_id = education.education_id
+        LEFT JOIN ethnicitie ON hr_record.ethnicity_id = ethnicitie.ethnicity_id
+        LEFT JOIN salary_standard ON hr_record.salary_standard_id = salary_standard.standard_id
+        <where>
+            <if test="id != null">
+                hr_record.record_id = #{id}
+            </if>
+        </where>
+    </select>
+    <select id="getLastId" resultType="java.lang.Long">
+        SELECT MAX(record_id) FROM hr_record
+    </select>
 </mapper>

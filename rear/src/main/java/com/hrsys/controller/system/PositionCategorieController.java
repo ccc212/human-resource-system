@@ -58,7 +58,7 @@ public class PositionCategorieController {
     @GetMapping("/list")
     @ApiOperation(value = "获取职位分类列表")
     public Result<IPage<PositionCategorie>> list(@RequestParam(defaultValue = "1") Integer current,
-                                         @RequestParam(defaultValue = "10") Integer pageSize) {
+                                         @RequestParam(defaultValue = "1000") Integer pageSize) {
         Page<PositionCategorie> page = new Page<>(current, pageSize);
         return Result.success(positionCategorieService.page(page));
     }

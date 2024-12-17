@@ -2,6 +2,7 @@ package com.hrsys.pojo.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,11 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class HrRecordAddDTO {
-
-    /**
-     * 用户ID
-     */
-    private Long userId;
 
     /**
      * I级机构ID
@@ -106,6 +102,7 @@ public class HrRecordAddDTO {
     /**
      * 出生日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
     /**
@@ -203,10 +200,6 @@ public class HrRecordAddDTO {
     /**
      * 登记时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registrationTime;
-
-    /**
-     * 状态（0：未复核，1：已复核，2：已删除）
-     */
-    private String status;
 }

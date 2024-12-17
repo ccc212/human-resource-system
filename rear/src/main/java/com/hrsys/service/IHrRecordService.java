@@ -1,11 +1,15 @@
 package com.hrsys.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.yulichang.base.MPJBaseService;
 import com.hrsys.pojo.dto.HrRecordAddDTO;
 import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hrsys.pojo.vo.HrRecordListVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,7 +19,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author 
  * @since 2024-11-27
  */
-public interface IHrRecordService extends IService<HrRecord> {
+public interface IHrRecordService extends MPJBaseService<HrRecord> {
 
     void add(HrRecordAddDTO hrRecordAddDTO);
 
@@ -25,5 +29,7 @@ public interface IHrRecordService extends IService<HrRecord> {
 
     void recover(Long id);
 
-    IPage<HrRecord> search(HrRecordSearchDTO hrRecordSearchDTO);
+    List<HrRecordListVO> search(HrRecordSearchDTO hrRecordSearchDTO);
+
+    HrRecordListVO getHrRecordById(Long id);
 }

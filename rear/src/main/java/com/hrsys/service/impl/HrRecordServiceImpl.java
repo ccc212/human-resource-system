@@ -4,17 +4,20 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hrsys.pojo.dto.HrRecordAddDTO;
 import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
 import com.hrsys.mapper.HrRecordMapper;
+import com.hrsys.pojo.vo.HrRecordListVO;
 import com.hrsys.service.IHrRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -26,15 +29,15 @@ import java.time.LocalDateTime;
  */
 @Service
 @RequiredArgsConstructor
-public class HrRecordServiceImpl extends ServiceImpl<HrRecordMapper, HrRecord> implements IHrRecordService {
+public class HrRecordServiceImpl extends MPJBaseServiceImpl<HrRecordMapper, HrRecord> implements IHrRecordService {
 
     private final HrRecordMapper hrRecordMapper;
 
     @Override
     public void add(HrRecordAddDTO hrRecordAddDTO) {
         HrRecord hrRecord = BeanUtil.copyProperties(hrRecordAddDTO, HrRecord.class);
-        Long userId = hrRecordAddDTO.getUserId();
-        int userIdLastTwoDigits = userId != null ? (int) (userId % 100) : 0;
+        Long userId = hrRecordMapper.getLastId();
+        int userIdLastTwoDigits = userId != null ? (int) (userId % 100 + 1) : 0;
         String recordId = generateArchiveNumber(2024, hrRecord.getOrgId1(), hrRecord.getOrgId2(), hrRecord.getOrgId3(), userIdLastTwoDigits);
         hrRecord.setRecordId(Long.parseLong(recordId));
         save(hrRecord);
@@ -61,27 +64,14 @@ public class HrRecordServiceImpl extends ServiceImpl<HrRecordMapper, HrRecord> i
     }
 
     @Override
-    public IPage<HrRecord> search(HrRecordSearchDTO hrRecordSearchDTO) {
-        Integer current = hrRecordSearchDTO.getCurrent();
-        Integer pageSize = hrRecordSearchDTO.getPageSize();
-        Long orgId1 = hrRecordSearchDTO.getOrgId1();
-        Long orgId2 = hrRecordSearchDTO.getOrgId2();
-        Long orgId3 = hrRecordSearchDTO.getOrgId3();
-        Long categoryId = hrRecordSearchDTO.getCategoryId();
-        Long positionId = hrRecordSearchDTO.getPositionId();
-        LocalDateTime begin = hrRecordSearchDTO.getBegin();
-        LocalDateTime end = hrRecordSearchDTO.getEnd();
+    public List<HrRecordListVO> search(HrRecordSearchDTO hrRecordSearchDTO) {
+        hrRecordSearchDTO.setCurrent(hrRecordSearchDTO.getCurrent() - 1);
+        return hrRecordMapper.search(hrRecordSearchDTO);
+    }
 
-        Page<HrRecord> page = new Page<>(current, pageSize);
-        LambdaQueryWrapper<HrRecord> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(orgId1 != null, HrRecord::getOrgId1, orgId1)
-                    .eq(orgId2 != null, HrRecord::getOrgId2, orgId2)
-                    .eq(orgId3 != null, HrRecord::getOrgId3, orgId3)
-                    .eq(categoryId != null, HrRecord::getCategoryId, categoryId)
-                    .eq(positionId != null, HrRecord::getPositionId, positionId)
-                    .ge(begin != null, HrRecord::getRegistrationTime, begin)
-                    .le(end != null, HrRecord::getRegistrationTime, end);
-        return hrRecordMapper.selectPage(page, queryWrapper);
+    @Override
+    public HrRecordListVO getHrRecordById(Long id) {
+        return hrRecordMapper.getHrRecordById(id);
     }
 
     private String generateArchiveNumber(int year, Long orgId1, Long orgId2, Long orgId3, int userIdLastTwoDigits) {

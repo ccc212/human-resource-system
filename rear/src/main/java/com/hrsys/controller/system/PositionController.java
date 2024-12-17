@@ -1,6 +1,7 @@
 package com.hrsys.controller.system;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hrsys.pojo.entity.Position;
@@ -22,7 +23,7 @@ import javax.validation.constraints.NotNull;
  * 职位表 前端控制器
  * </p>
  *
- * @author 
+ * @author
  * @since 2024-11-27
  */
 @RestController
@@ -58,8 +59,10 @@ public class PositionController {
     @GetMapping("/list")
     @ApiOperation(value = "获取职位列表")
     public Result<IPage<Position>> list(@RequestParam(defaultValue = "1") Integer current,
-                                         @RequestParam(defaultValue = "10") Integer pageSize) {
+                                        @RequestParam(defaultValue = "10") Integer pageSize,
+                                        @RequestParam(defaultValue = "1") Integer categoryId) {
         Page<Position> page = new Page<>(current, pageSize);
-        return Result.success(positionService.page(page));
+        return Result.success(positionService.page(page,
+                new LambdaQueryWrapper<Position>().eq(Position::getCategoryId, categoryId)));
     }
 }

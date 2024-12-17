@@ -1,14 +1,15 @@
 package com.hrsys.controller.humanResource;
 
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.hrsys.pojo.dto.HrRecordAddDTO;
 import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
 import com.hrsys.pojo.entity.Result;
+import com.hrsys.pojo.vo.HrRecordListVO;
 import com.hrsys.service.IHrRecordService;
 import com.hrsys.service.IMinIOService;
 import io.swagger.annotations.Api;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * <p>
@@ -73,33 +75,15 @@ public class HrRecordController {
         return Result.success();
     }
 
-    @GetMapping("/list")
-    @ApiOperation(value = "获取人力资源档案列表")
-    public Result<IPage<HrRecord>> list(@RequestParam(defaultValue = "1") Integer current,
-                                        @RequestParam(defaultValue = "10") Integer pageSize,
-                                        @RequestParam Boolean checkIsPass,
-                                        @RequestParam Boolean isDeleted) {
-        Page<HrRecord> page = new Page<>(current, pageSize);
-        Page<HrRecord> result;
-        if (checkIsPass == null) {
-            result = hrRecordService.page(page);
-        } else if (isDeleted) {
-            result = hrRecordService.page(page, new LambdaUpdateWrapper<HrRecord>().eq(HrRecord::getStatus, "2"));
-        } else {
-            result = hrRecordService.page(page, new LambdaUpdateWrapper<HrRecord>().eq(HrRecord::getStatus, checkIsPass ? "1" : "0"));
-        }
-        return Result.success(result);
-    }
-
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id获取人力资源档案")
-    public Result<HrRecord> get(@PathVariable @NotNull Long id) {
-        return Result.success(hrRecordService.getById(id));
+    public Result<HrRecordListVO> get(@PathVariable @NotNull Long id) {
+        return Result.success(hrRecordService.getHrRecordById(id));
     }
 
     @GetMapping("/search")
     @ApiOperation(value = "条件查询")
-    public Result<IPage<HrRecord>> search(HrRecordSearchDTO hrRecordSearchDTO) {
+    public Result<List<HrRecordListVO>> search(HrRecordSearchDTO hrRecordSearchDTO) {
         return Result.success(hrRecordService.search(hrRecordSearchDTO));
     }
 

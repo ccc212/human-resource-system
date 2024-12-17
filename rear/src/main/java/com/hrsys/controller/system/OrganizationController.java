@@ -1,6 +1,7 @@
 package com.hrsys.controller.system;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hrsys.pojo.entity.Organization;
@@ -22,7 +23,7 @@ import javax.validation.constraints.NotNull;
  * 组织机构表 前端控制器
  * </p>
  *
- * @author 
+ * @author
  * @since 2024-11-27
  */
 @RestController
@@ -58,8 +59,10 @@ public class OrganizationController {
     @GetMapping("/list")
     @ApiOperation(value = "获取组织机构列表")
     public Result<IPage<Organization>> list(@RequestParam(defaultValue = "1") Integer current,
-                                         @RequestParam(defaultValue = "10") Integer pageSize) {
+                                            @RequestParam(defaultValue = "1000") Integer pageSize,
+                                            @RequestParam(defaultValue = "1") Integer level) {
         Page<Organization> page = new Page<>(current, pageSize);
-        return Result.success(organizationService.page(page));
+        return Result.success(organizationService.page(page,
+                new LambdaQueryWrapper<Organization>().eq(Organization::getLevel, level)));
     }
 }
