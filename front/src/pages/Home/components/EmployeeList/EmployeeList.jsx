@@ -39,6 +39,8 @@ const EmployeeList = () => {
   const [orgOptions, setOrgOptions] = useState({ level1: [], level2: [], level3: [] });
   const [positionCategories, setPositionCategories] = useState([]);
   const [positions, setPositions] = useState([]);
+  const [editingRecord, setEditingRecord] = useState(null);
+  const [editForm] = Form.useForm();
 
   // 获取一级机构
   useEffect(() => {
@@ -97,7 +99,7 @@ const EmployeeList = () => {
       current: pagination.current,
       pageSize: pagination.pageSize,
     }).then(response => {
-      setData(response.data.map(item => ({
+      setData(response.data.records.map(item => ({
         id: item.recordId,
         name: item.name,
         gender: item.gender === '0' ? '男' : '女',
@@ -105,10 +107,41 @@ const EmployeeList = () => {
         orgName2: item.orgName2,
         orgName3: item.orgName3,
         position: item.positionName,
+        status: item.status,
+        categoryName: item.categoryName,
+        titleName: item.titleName,
+        email: item.email,
+        phone: item.phone,
+        qq: item.qq,
+        mobile: item.mobile,
+        address: item.address,
+        postalCode: item.postalCode,
+        nationality: item.nationality,
+        birthplace: item.birthplace,
+        birthdate: item.birthdate,
+        ethnicityName: item.ethnicityName,
+        religion: item.religion,
+        politicalAffiliation: item.politicalAffiliation,
+        idNumber: item.idNumber,
+        socialSecurityNumber: item.socialSecurityNumber,
+        age: item.age,
+        educationName: item.educationName,
+        major: item.major,
+        salaryStandardName: item.salaryStandardName,
+        bankName: item.bankName,
+        accountNumber: item.accountNumber,
+        skills: item.skills,
+        hobbies: item.hobbies,
+        personalHistory: item.personalHistory,
+        familyInfo: item.familyInfo,
+        remarks: item.remarks,
+        photoUrl: item.photoUrl,
+        registrar: item.registrar,
+        registrationTime: item.registrationTime,
       })));
       setPagination(prev => ({
         ...prev,
-        total: response.data.length,
+        total: response.data.total,
       }));
       setLoading(false);
     }).catch(() => {
@@ -134,31 +167,226 @@ const EmployeeList = () => {
 
   // 查看详情
 const handleView = (record) => {
-  Modal.info({
-    title: '员工详细信息',
-    content: (
-      <div>
-        <p>姓名: {record.name}</p>
-        <p>性别: {record.gender}</p>
-        <p>一级机构: {record.orgName1}</p>
-        <p>二级机构: {record.orgName2}</p>
-        <p>三级机构: {record.orgName3}</p>
-        <p>职位名称: {record.positionName}</p>
-        <p>职称: {record.titleName}</p>
-        <p>邮箱: {record.email}</p>
-        <p>电话: {record.phone}</p>
-        <p>登记人: {record.registrar}</p>
-        <p>登记时间: {record.registrationTime}</p>
-        {/* 添加其他字段 */}
-      </div>
-    ),
-    onOk() {},
+  employeeAPI.getEmployeeById(record.id).then(response => {
+    const detail = response.data;
+    Modal.info({
+      title: '员工详细信息',
+      width: 1200,
+      content: (
+        <div>
+          <Row gutter={16}>
+            <Col span={8}>
+              <p><strong>档案编号:</strong> {detail.recordId}</p>
+              <p><strong>姓名:</strong> {detail.name}</p>
+              <p><strong>性别:</strong> {detail.gender === '0' ? '男' : '女'}</p>
+              <p><strong>一级机构:</strong> {detail.orgName1}</p>
+              <p><strong>二级机构:</strong> {detail.orgName2}</p>
+              <p><strong>三级机构:</strong> {detail.orgName3}</p>
+              <p><strong>职位名称:</strong> {detail.positionName}</p>
+              <p><strong>职位分类:</strong> {detail.categoryName}</p>
+              <p><strong>职称:</strong> {detail.titleName}</p>
+              <p><strong>邮箱:</strong> {detail.email}</p>
+              <p><strong>电话:</strong> {detail.phone}</p>
+              <p><strong>QQ:</strong> {detail.qq}</p>
+              <p><strong>手机:</strong> {detail.mobile}</p>
+            </Col>
+            <Col span={8}>
+              <p><strong>住址:</strong> {detail.address}</p>
+              <p><strong>邮政编码:</strong> {detail.postalCode}</p>
+              <p><strong>国籍:</strong> {detail.nationality}</p>
+              <p><strong>出生地:</strong> {detail.birthplace}</p>
+              <p><strong>出生日期:</strong> {detail.birthdate}</p>
+              <p><strong>民族:</strong> {detail.ethnicityName}</p>
+              <p><strong>宗教信仰:</strong> {detail.religion}</p>
+              <p><strong>政治面貌:</strong> {detail.politicalAffiliation}</p>
+              <p><strong>身份证号码:</strong> {detail.idNumber}</p>
+              <p><strong>社会保障号码:</strong> {detail.socialSecurityNumber}</p>
+              <p><strong>年龄:</strong> {detail.age}</p>
+              <p><strong>学历:</strong> {detail.educationName}</p>
+              <p><strong>专业:</strong> {detail.major}</p>
+            </Col>
+            <Col span={8}>
+              <p><strong>薪酬标准:</strong> {detail.salaryStandardName}</p>
+              <p><strong>开户行:</strong> {detail.bankName}</p>
+              <p><strong>账号:</strong> {detail.accountNumber}</p>
+              <p><strong>特长:</strong> {detail.skills}</p>
+              <p><strong>爱好:</strong> {detail.hobbies}</p>
+              <p><strong>个人履历:</strong> {detail.personalHistory}</p>
+              <p><strong>家庭关系信息:</strong> {detail.familyInfo}</p>
+              <p><strong>备注:</strong> {detail.remarks}</p>
+              <p><strong>员工相片:</strong> <img src={detail.photoUrl} alt="员工相片" style={{ width: '100px' }} /></p>
+              <p><strong>登记人:</strong> {detail.registrar}</p>
+              <p><strong>登记时间:</strong> {detail.registrationTime}</p>
+            </Col>
+          </Row>
+        </div>
+      ),
+      onOk() {},
+      footer: (
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button onClick={() => Modal.destroyAll()}>返回</Button>
+          <Button type="primary" onClick={() => handleReview(record.id)}>
+            复核
+          </Button>
+        </div>
+      ),
+    });
+  }).catch(() => {
+    message.error('获取详细信息失败');
+  });
+};
+
+const handleReview = (id) => {
+  employeeAPI.reviewEmployee(id).then(() => {
+    message.success('复核成功');
+    fetchData(); // 重新加载数据
+  }).catch(() => {
+    message.error('复核失败');
   });
 };
 
   const handleEdit = (record) => {
-    console.log('编辑记录:', record);
-    // 实现编辑逻辑
+    setEditingRecord(record);
+    editForm.setFieldsValue(record);
+    Modal.confirm({
+      title: '编辑员工信息',
+      width: 800,
+      content: (
+        <Form form={editForm} layout="vertical">
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item name="name" label="姓名" rules={[{ required: true, message: '请输入姓名' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item name="gender" label="性别" rules={[{ required: true, message: '请选择性别' }]}>
+                <Select>
+                  <Option value="0">男</Option>
+                  <Option value="1">女</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="orgName1" label="一级机构">
+                <Input />
+              </Form.Item>
+              <Form.Item name="orgName2" label="二级机构">
+                <Input />
+              </Form.Item>
+              <Form.Item name="orgName3" label="三级机构">
+                <Input />
+              </Form.Item>
+              <Form.Item name="position" label="职位名称">
+                <Input />
+              </Form.Item>
+              <Form.Item name="categoryName" label="职位分类">
+                <Input />
+              </Form.Item>
+              <Form.Item name="titleName" label="职称">
+                <Input />
+              </Form.Item>
+              <Form.Item name="email" label="邮箱">
+                <Input />
+              </Form.Item>
+              <Form.Item name="phone" label="电话">
+                <Input />
+              </Form.Item>
+              <Form.Item name="qq" label="QQ">
+                <Input />
+              </Form.Item>
+              <Form.Item name="mobile" label="手机">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="address" label="住址">
+                <Input />
+              </Form.Item>
+              <Form.Item name="postalCode" label="邮政编码">
+                <Input />
+              </Form.Item>
+              <Form.Item name="nationality" label="国籍">
+                <Input />
+              </Form.Item>
+              <Form.Item name="birthplace" label="出生地">
+                <Input />
+              </Form.Item>
+              <Form.Item name="birthdate" label="出生日期">
+                <DatePicker style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item name="ethnicityName" label="民族">
+                <Input />
+              </Form.Item>
+              <Form.Item name="religion" label="宗教信仰">
+                <Input />
+              </Form.Item>
+              <Form.Item name="politicalAffiliation" label="政治面貌">
+                <Input />
+              </Form.Item>
+              <Form.Item name="idNumber" label="身份证号码">
+                <Input />
+              </Form.Item>
+              <Form.Item name="socialSecurityNumber" label="社会保障号码">
+                <Input />
+              </Form.Item>
+              <Form.Item name="age" label="年龄">
+                <Input />
+              </Form.Item>
+              <Form.Item name="educationName" label="学历">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="major" label="专业">
+                <Input />
+              </Form.Item>
+              <Form.Item name="salaryStandardName" label="薪酬标准">
+                <Input />
+              </Form.Item>
+              <Form.Item name="bankName" label="开户行">
+                <Input />
+              </Form.Item>
+              <Form.Item name="accountNumber" label="账号">
+                <Input />
+              </Form.Item>
+              <Form.Item name="skills" label="特长">
+                <Input />
+              </Form.Item>
+              <Form.Item name="hobbies" label="爱好">
+                <Input />
+              </Form.Item>
+              <Form.Item name="personalHistory" label="个人履历">
+                <Input />
+              </Form.Item>
+              <Form.Item name="familyInfo" label="家庭关系信息">
+                <Input />
+              </Form.Item>
+              <Form.Item name="remarks" label="备注">
+                <Input />
+              </Form.Item>
+              <Form.Item name="photoUrl" label="员工相片">
+                <Input />
+              </Form.Item>
+              <Form.Item name="registrar" label="登记人">
+                <Input disabled />
+              </Form.Item>
+              <Form.Item name="registrationTime" label="登记时间">
+                <DatePicker showTime style={{ width: '100%' }} disabled />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      ),
+      onOk: () => {
+        editForm.validateFields().then(values => {
+          employeeAPI.updateEmployee({ recordId: editingRecord.id, ...values }).then(() => {
+            message.success('更新成功');
+            fetchData();
+          }).catch(() => {
+            message.error('更新失败');
+          });
+        }).catch(() => {
+          message.error('请检查输入');
+        });
+      },
+    });
   };
 
   // 删除
@@ -232,6 +460,24 @@ const handleView = (record) => {
       dataIndex: 'position',
       key: 'position',
       width: 120,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      width: 100,
+      render: (status) => {
+        switch (status) {
+          case '0':
+            return <Tag color="blue">未复核</Tag>;
+          case '1':
+            return <Tag color="green">已复核</Tag>;
+          case '2':
+            return <Tag color="red">已删除</Tag>;
+          default:
+            return <Tag>未知</Tag>;
+        }
+      },
     },
     {
       title: '操作',

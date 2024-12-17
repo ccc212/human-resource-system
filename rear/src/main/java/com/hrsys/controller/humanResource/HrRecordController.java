@@ -9,6 +9,7 @@ import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
 import com.hrsys.pojo.entity.Result;
+import com.hrsys.pojo.vo.HrRecordDetailVO;
 import com.hrsys.pojo.vo.HrRecordListVO;
 import com.hrsys.service.IHrRecordService;
 import com.hrsys.service.IMinIOService;
@@ -77,14 +78,15 @@ public class HrRecordController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id获取人力资源档案")
-    public Result<HrRecordListVO> get(@PathVariable @NotNull Long id) {
+    public Result<HrRecordDetailVO> get(@PathVariable @NotNull Long id) {
         return Result.success(hrRecordService.getHrRecordById(id));
     }
 
     @GetMapping("/search")
     @ApiOperation(value = "条件查询")
-    public Result<List<HrRecordListVO>> search(HrRecordSearchDTO hrRecordSearchDTO) {
-        return Result.success(hrRecordService.search(hrRecordSearchDTO));
+    public Result<IPage<HrRecordListVO>> search(HrRecordSearchDTO hrRecordSearchDTO) {
+        IPage<HrRecordListVO> pageResult = hrRecordService.search(hrRecordSearchDTO);
+        return Result.success(pageResult);
     }
 
 }

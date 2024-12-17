@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Form, Input, Select, DatePicker, Button, Row, Col, Card, InputNumber, message } from 'antd';
+import { Form, Input, Select, DatePicker, Button, Row, Col, Card, message } from 'antd';
 import { employeeAPI } from '../../../../api/modules/employee';
 import { organizationAPI, positionCategorieAPI, positionAPI, titleAPI, educationAPI, ethnicitiesAPI } from '../../../../api/modules/system';
 import { salaryItemsAPI } from '../../../../api/modules/salary';
@@ -84,7 +84,7 @@ const EmployeeForm = () => {
 
   // 处理职位分类选择变化
   const handleCategoryChange = (value) => {
-    form.setFieldsValue({ position: undefined });
+    form.setFieldsValue({ positionId: undefined });
     if (value) {
       positionAPI.list({ categoryId: value }).then(response => {
         setPositions(response.data.records);
@@ -180,7 +180,7 @@ const EmployeeForm = () => {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="birthDate" label="出生日期" rules={[{ required: true }]}>
+            <Form.Item name="birthdate" label="出生日期" rules={[{ required: true }]}>
               <DatePicker style={{ width: '100%' }} />
             </Form.Item>
           </Col>
@@ -214,7 +214,7 @@ const EmployeeForm = () => {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="postcode" label="邮编">
+            <Form.Item name="postalCode" label="邮编">
               <Input placeholder="请输入邮编" />
             </Form.Item>
           </Col>
@@ -247,7 +247,7 @@ const EmployeeForm = () => {
 
         <Row gutter={24}>
           <Col span={8}>
-            <Form.Item name="politicalStatus" label="政治面貌">
+            <Form.Item name="politicalAffiliation" label="政治面貌">
               <Input placeholder="请输入政治面貌" />
             </Form.Item>
           </Col>
@@ -261,7 +261,7 @@ const EmployeeForm = () => {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item name="socialSecurity" label="社会保障号码">
+            <Form.Item name="socialSecurityNumber" label="社会保障号码">
               <Input placeholder="请输入社会保障号码" />
             </Form.Item>
           </Col>
@@ -291,12 +291,12 @@ const EmployeeForm = () => {
 
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item name="bank" label="开户行">
+            <Form.Item name="bankName" label="开户行">
               <Input placeholder="请输入开户行" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="bankAccount" label="账号">
+            <Form.Item name="accountNumber" label="账号">
               <Input placeholder="请输入银行账号" />
             </Form.Item>
           </Col>
@@ -312,12 +312,12 @@ const EmployeeForm = () => {
 
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item name="speciality" label="特长">
+            <Form.Item name="skills" label="特长">
               <Input.TextArea rows={2} placeholder="请输入特长" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="hobby" label="爱好">
+            <Form.Item name="hobbies" label="爱好">
               <Input.TextArea rows={2} placeholder="请输入爱好" />
             </Form.Item>
           </Col>
@@ -325,7 +325,7 @@ const EmployeeForm = () => {
 
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item name="resume" label="个人履历">
+            <Form.Item name="personalHistory" label="个人履历">
               <Input.TextArea rows={4} placeholder="请输入个人履历" />
             </Form.Item>
           </Col>

@@ -20,4 +20,5 @@ public class HrRecordListVO implements Serializable {
     private String positionName;
     private String name;
     private String gender; // 性别（0：男，1：女）
+    private String status; // 状态（0：未复核，1：已复核，2：已删除）
 }

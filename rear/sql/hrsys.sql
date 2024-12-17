@@ -129,7 +129,7 @@ DROP TABLE IF EXISTS salary_standard;
 CREATE TABLE salary_standard
 (
     standard_id              BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '薪酬标准编号',
-    name                     VARCHAR(50) NOT NULL COMMENT '薪酬标准名称',
+    salary_standard_name                     VARCHAR(50) NOT NULL COMMENT '薪酬标准名称',
     creator                  VARCHAR(50) NOT NULL COMMENT '制定人',
     registrar                VARCHAR(50) NOT NULL DEFAULT '' COMMENT '登记人',
     registration_time        DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登记时间',

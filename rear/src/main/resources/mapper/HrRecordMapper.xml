@@ -10,7 +10,8 @@
         org3.org_name org_name3,
         position.position_name,
         hr_record.name,
-        hr_record.gender
+        hr_record.gender,
+        hr_record.status
         FROM
         hr_record
         LEFT JOIN organization org1 ON hr_record.org_id1 = org1.org_id
@@ -39,10 +40,9 @@
                 AND hr_record.registration_time BETWEEN #{hrRecordSearchDTO.begin} AND #{hrRecordSearchDTO.end}
             </if>
         </where>
-        LIMIT #{hrRecordSearchDTO.current},#{hrRecordSearchDTO.pageSize}
     </select>
 
-    <select id="getHrRecordById" resultType="com.hrsys.pojo.vo.HrRecordListVO" parameterType="java.lang.Long">
+    <select id="getHrRecordById" resultType="com.hrsys.pojo.vo.HrRecordDetailVO" parameterType="java.lang.Long">
         SELECT
         hr_record.record_id,
         org1.org_name org_name1,
@@ -70,7 +70,7 @@
         hr_record.age,
         education.education_name,
         hr_record.major,
-        salary_standard.name,
+        salary_standard.salary_standard_name,
         hr_record.bank_name,
         hr_record.account_number,
         hr_record.skills,

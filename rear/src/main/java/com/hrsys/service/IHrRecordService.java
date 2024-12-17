@@ -7,6 +7,7 @@ import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hrsys.pojo.vo.HrRecordDetailVO;
 import com.hrsys.pojo.vo.HrRecordListVO;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface IHrRecordService extends MPJBaseService<HrRecord> {
 
     void recover(Long id);
 
-    List<HrRecordListVO> search(HrRecordSearchDTO hrRecordSearchDTO);
+    IPage<HrRecordListVO> search(HrRecordSearchDTO hrRecordSearchDTO);
 
-    HrRecordListVO getHrRecordById(Long id);
+    HrRecordDetailVO getHrRecordById(Long id);
 }

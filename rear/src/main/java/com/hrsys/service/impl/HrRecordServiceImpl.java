@@ -10,6 +10,7 @@ import com.hrsys.pojo.dto.HrRecordSearchDTO;
 import com.hrsys.pojo.dto.HrRecordUpdateDTO;
 import com.hrsys.pojo.entity.HrRecord;
 import com.hrsys.mapper.HrRecordMapper;
+import com.hrsys.pojo.vo.HrRecordDetailVO;
 import com.hrsys.pojo.vo.HrRecordListVO;
 import com.hrsys.service.IHrRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -64,13 +65,14 @@ public class HrRecordServiceImpl extends MPJBaseServiceImpl<HrRecordMapper, HrRe
     }
 
     @Override
-    public List<HrRecordListVO> search(HrRecordSearchDTO hrRecordSearchDTO) {
-        hrRecordSearchDTO.setCurrent(hrRecordSearchDTO.getCurrent() - 1);
-        return hrRecordMapper.search(hrRecordSearchDTO);
+    public IPage<HrRecordListVO> search(HrRecordSearchDTO hrRecordSearchDTO) {
+        Page<HrRecord> page = new Page<>(hrRecordSearchDTO.getCurrent(), hrRecordSearchDTO.getPageSize());
+        IPage<HrRecordListVO> resultPage = hrRecordMapper.search(page, hrRecordSearchDTO);
+        return resultPage;
     }
 
     @Override
-    public HrRecordListVO getHrRecordById(Long id) {
+    public HrRecordDetailVO getHrRecordById(Long id) {
         return hrRecordMapper.getHrRecordById(id);
     }
 
