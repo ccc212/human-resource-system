@@ -16,7 +16,7 @@ public interface IEthnicitieService extends IService<Ethnicitie> {
 
     void add(Ethnicitie ethnicitie);
 
-    void delete(Integer id);
+    void delete(Long id);
 
     void change(Ethnicitie ethnicitie);
 }

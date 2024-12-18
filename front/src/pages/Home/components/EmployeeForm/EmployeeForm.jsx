@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Form, Input, Select, DatePicker, Button, Row, Col, Card, message } from 'antd';
+import { Form, Input, Select, DatePicker, Button, Row, Col, Card, message, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { employeeAPI } from '../../../../api/modules/employee';
 import { organizationAPI, positionCategorieAPI, positionAPI, titleAPI, educationAPI, ethnicitiesAPI } from '../../../../api/modules/system';
 import { salaryItemsAPI } from '../../../../api/modules/salary';
@@ -16,6 +17,7 @@ const EmployeeForm = () => {
   const [educations, setEducations] = useState([]);
   const [ethnicities, setEthnicities] = useState([]);
   const [salaryItems, setSalaryItems] = useState([]);
+  const [photoUrl, setPhotoUrl] = useState('');
 
   // 获取一级机构
   useEffect(() => {
@@ -94,15 +96,27 @@ const EmployeeForm = () => {
     }
   };
 
+  // 处理图片上传
+  const handleUpload = ({ file }) => {
+    if (file.status === 'done') {
+      setPhotoUrl(file.response.data);
+      message.success('图片上传成功');
+    } else if (file.status === 'error') {
+      message.error('图片上传失败');
+    }
+  };
+
   const onFinish = (values) => {
     const employeeData = {
       ...values,
-      registrar: '当前登录用户', // 应从登录状态获取
+      photoUrl,
+      registrar: '当前登录用户',
       registrationTime: moment(),
     };
     employeeAPI.addEmployee(employeeData).then(() => {
       message.success('添加成功');
       form.resetFields();
+      setPhotoUrl('');
     }).catch(() => {
       message.error('添加失败');
     });
@@ -360,6 +374,22 @@ const EmployeeForm = () => {
                 style={{ width: '100%' }} 
                 disabled 
               />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={24}>
+            <Form.Item label="上传员工相片">
+              <Upload
+                name="avatar"
+                action="/hr-record/avatar"
+                listType="picture"
+                onChange={handleUpload}
+                showUploadList={false}
+              >
+                <Button icon={<UploadOutlined />}>点击上传</Button>
+              </Upload>
+              {photoUrl && <img src={photoUrl} alt="员工相片" style={{ width: '100px', marginTop: '10px' }} />}
             </Form.Item>
           </Col>
         </Row>

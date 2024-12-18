@@ -16,7 +16,7 @@ instance.interceptors.request.use(
     // 可以在这里添加token等认证信息
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers['token'] = token;
     }
     return config;
   },
@@ -43,7 +43,7 @@ instance.interceptors.response.use(
           message.error('拒绝访问');
           break;
         case 404:
-          message.error('请求错��，未找到该资源');
+          message.error('请求错误，未找到该资源');
           break;
         case 500:
           message.error('服务器错误');

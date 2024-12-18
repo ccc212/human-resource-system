@@ -37,21 +37,21 @@ public class EthnicitieController {
     @PostMapping
     @ApiOperation(value = "添加民族")
     public Result<?> add(@RequestBody @Valid Ethnicitie ethnicitie) {
-        ethnicitieService.save(ethnicitie);
+        ethnicitieService.add(ethnicitie);
         return Result.success();
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "删除民族")
     public Result<?> delete(@PathVariable @NotNull(message = "id不能为空") Long id) {
-        ethnicitieService.removeById(id);
+        ethnicitieService.delete(id);
         return Result.success();
     }
 
     @PutMapping
     @ApiOperation(value = "修改民族")
     public Result<?> update(@RequestBody @Valid Ethnicitie ethnicitie) {
-        ethnicitieService.updateById(ethnicitie);
+        ethnicitieService.change(ethnicitie);
         return Result.success();
     }
 

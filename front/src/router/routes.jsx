@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 // 使用懒加载导入页面组件
 const Login = lazy(() => import('../pages/Login'));
+const Register = lazy(() => import('../pages/Register'));
 const Home = lazy(() => import('../pages/Home'));
 const NotFound = lazy(() => import('../pages/404'));
 
@@ -11,6 +12,10 @@ const routes = [
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/register',
+    element: <Register />
   },
   {
     path: '/home',

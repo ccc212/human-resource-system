@@ -1,7 +1,9 @@
 package com.hrsys.service;
 
-import com.hrsys.pojo.entity.Position;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hrsys.pojo.entity.Position;
+import com.hrsys.pojo.vo.PositionVO;
 
 /**
  * <p>
@@ -18,4 +20,6 @@ public interface IPositionService extends IService<Position> {
     void delete(Long id);
 
     void change(Position position);
+
+    IPage<PositionVO> search(Integer current, Integer pageSize, Integer categoryId);
 }

@@ -62,15 +62,8 @@ public class HrRecordController {
         return Result.success();
     }
 
-    @DeleteMapping("/recover/{id}")
-    @ApiOperation(value = "恢复已删除")
-    public Result<?> recover(@PathVariable @NotNull Long id) {
-        hrRecordService.recover(id);
-        return Result.success();
-    }
-
     @PutMapping("/update")
-    @ApiOperation(value = "变更/复核")
+    @ApiOperation(value = "变更/复核/恢复")
     public Result<?> update(@RequestBody @Valid HrRecordUpdateDTO hrRecordUpdateDTO) {
         hrRecordService.change(hrRecordUpdateDTO);
         return Result.success();

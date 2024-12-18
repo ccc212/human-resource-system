@@ -21,6 +21,13 @@ import SalaryStandard from './components/SalaryStandard';
 import SalaryPayment from './components/SalaryPayment';
 import SalaryStatistics from './components/SalaryStatistics';
 import SalaryItems from './components/SalaryItems';
+import RoleManage from './components/RoleManage';
+import OrganizationManage from './components/OrganizationManage';
+import PositionCategoryManage from './components/PositionCategoryManage';
+import PositionManage from './components/PositionManage';
+import TitleManage from './components/TitleManage';
+import EducationManage from './components/EducationManage';
+import EthnicityManage from './components/EthnicityManage';
 import './style.css';
 
 const { Header, Sider, Content } = Layout;
@@ -114,6 +121,55 @@ const Home = () => {
       ],
     },
     {
+      key: 'system',
+      icon: <SettingOutlined />,
+      label: '系统管理',
+      children: [
+        {
+          key: 'role-manage',
+          icon: <AppstoreOutlined />,
+          label: '角色管理',
+          onClick: () => setActiveTab('role-manage'),
+        },
+        {
+          key: 'organization-manage',
+          icon: <AppstoreOutlined />,
+          label: '组织机构管理',
+          onClick: () => setActiveTab('organization-manage'),
+        },
+        {
+          key: 'position-category-manage',
+          icon: <AppstoreOutlined />,
+          label: '职位分类管理',
+          onClick: () => setActiveTab('position-category-manage'),
+        },
+        {
+          key: 'position-manage',
+          icon: <AppstoreOutlined />,
+          label: '职位管理',
+          onClick: () => setActiveTab('position-manage'),
+        },
+        {
+          key: 'title-manage',
+          icon: <AppstoreOutlined />,
+          label: '职称管理',
+          onClick: () => setActiveTab('title-manage'),
+        },
+        {
+          key: 'education-manage',
+          icon: <AppstoreOutlined />,
+          label: '学历管理',
+          onClick: () => setActiveTab('education-manage'),
+        },
+        {
+          key: 'ethnicities-manage',
+          icon: <AppstoreOutlined />,
+          label: '民族管理',
+          onClick: () => setActiveTab('ethnicities-manage'),
+        }
+      ],
+    },
+    {
       key: 'settings',
       icon: <SettingOutlined />,
       label: '系统设置',
@@ -151,6 +207,41 @@ const Home = () => {
       key: 'salary-items',
       label: '薪资项目管理',
       children: <SalaryItems />
+    },
+    {
+      key: 'role-manage',
+      label: '角色管理',
+      children: <RoleManage />
+    },
+    {
+      key: 'organization-manage',
+      label: '组织机构管理',
+      children: <OrganizationManage />
+    },
+    {
+      key: 'position-category-manage',
+      label: '职位分类管理',
+      children: <PositionCategoryManage />
+    },
+    {
+      key: 'position-manage',
+      label: '职位管理',
+      children: <PositionManage />
+    },
+    {
+      key: 'title-manage',
+      label: '职称管理',
+      children: <TitleManage />
+    },
+    {
+      key: 'education-manage',
+      label: '学历管理',
+      children: <EducationManage />
+    },
+    {
+      key: 'ethnicities-manage',
+      label: '民族管理',
+      children: <EthnicityManage />
     }
   ].map(item => ({
     ...item,

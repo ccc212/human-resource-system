@@ -28,7 +28,7 @@ public class EthnicitieServiceImpl extends ServiceImpl<EthnicitieMapper, Ethnici
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (lambdaQuery().eq(Ethnicitie::getEthnicityId, id).one() == null) {
             throw new BizException(StatusCodeEnum.NOT_EXISTS);
         }

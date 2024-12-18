@@ -97,7 +97,7 @@ CREATE TABLE hr_record
     personal_history       TEXT COMMENT '个人履历',
     family_info            TEXT COMMENT '家庭关系信息',
     remarks                TEXT COMMENT '备注',
-    photo_url              VARCHAR(255) COMMENT '员工相片url',
+    photo_url              TEXT COMMENT '员工相片url',
     registrar              VARCHAR(50) NOT NULL DEFAULT '' COMMENT '登记人',
     registration_time      DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登记时间',
     status                 CHAR(1)              DEFAULT '0' COMMENT '状态（0：未复核，1：已复核，2：已删除）'
@@ -257,7 +257,7 @@ VALUES (1, '助理'),
 DROP TABLE IF EXISTS ethnicitie;
 CREATE TABLE ethnicitie
 (
-    ethnicity_id   BIGINT PRIMARY KEY COMMENT '民族ID',
+    ethnicity_id   BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '民族ID',
     ethnicity_name VARCHAR(50) COMMENT '民族名称'
 ) COMMENT '民族表';
 

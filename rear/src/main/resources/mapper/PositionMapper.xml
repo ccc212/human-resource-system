@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hrsys.mapper.PositionMapper">
-
+    <select id="search" resultType="com.hrsys.pojo.vo.PositionVO">
+        SELECT p.*, c.category_name categoryName
+        FROM position p
+        LEFT JOIN position_categorie c ON p.category_id = c.category_id
+        <where>
+            <if test="categoryId != null">
+                AND p.category_id = #{categoryId}
+            </if>
+        </where>
+    </select>
 </mapper>

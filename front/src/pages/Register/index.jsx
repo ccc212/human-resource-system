@@ -7,33 +7,32 @@ import './style.css';
 const Login = () => {
   const navigate = useNavigate();
 
-  const handleLogin = async (values) => {
+  const handleRegister = async (values) => {
     try {
-      const response = await axios.post('/user/login', values);
+      const response = await axios.post('/user/register', values);
       if (response.data.code === 200) {
-        const { token, userId } = response.data.data;
+        const { token } = response.data.data;
         localStorage.setItem('token', token);
-        localStorage.setItem('userId', userId);
-        message.success('登录成功');
-        navigate('/home');
+        message.success('注册成功');
+        navigate('/login');
       } else {
-        message.error(response.data.msg || '登录失败');
+        message.error(response.data.msg || '注册失败');
       }
     } catch (error) {
-      message.error('登录失败，请检查您的用户名和密码');
+      message.error('注册失败，请检查您的用户名和密码');
     }
   };
 
-  const handleRegister = () => {
-    navigate('/register');
+  const handleLogin = () => {
+    navigate('/login');
   };
 
   return (
     <div className="login-container">
       <Card className="login-card" bordered={false}>
-        <h1>登录到我的应用</h1>
+        <h1>注册到我的应用</h1>
         
-        <Form layout="vertical" onFinish={handleLogin}>
+        <Form layout="vertical" onFinish={handleRegister}>
           <Form.Item
             name="username"
             rules={[{ required: true, message: '请输入用户名' }]}
@@ -58,13 +57,13 @@ const Login = () => {
           
           <Form.Item>
             <Button type="primary" block size="large" htmlType="submit">
-              登录
+              注册
             </Button>
           </Form.Item>
 
           <Form.Item>
-            <Button type="default" block size="large" onClick={handleRegister}>
-              注册
+            <Button type="default" block size="large" onClick={handleLogin}>
+              登录
             </Button>
           </Form.Item>
           

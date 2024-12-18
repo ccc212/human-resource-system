@@ -403,6 +403,15 @@ const handleReview = (id) => {
     });
   };
 
+  const handleRecover = (id) => {
+    employeeAPI.recoverEmployee(id).then(() => {
+      message.success('恢复成功');
+      fetchData(); // 重新加载数据
+    }).catch(() => {
+      message.error('恢复失败');
+    });
+  };
+
   const handleTableChange = (pagination, filters, sorter) => {
     setPagination(pagination);
     fetchData({
@@ -487,6 +496,13 @@ const handleReview = (id) => {
           <Button icon={<EyeOutlined />} onClick={() => handleView(record)}>查看</Button>
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>编辑</Button>
           <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} danger>删除</Button>
+          <Button 
+            type="primary" 
+            style={{ backgroundColor: 'green', borderColor: 'green' }} 
+            onClick={() => handleRecover(record.id)}
+          >
+            恢复
+          </Button>
         </Space>
       ),
     },

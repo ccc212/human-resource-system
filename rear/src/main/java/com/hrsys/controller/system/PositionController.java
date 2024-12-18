@@ -1,13 +1,10 @@
 package com.hrsys.controller.system;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hrsys.pojo.entity.Position;
 import com.hrsys.pojo.entity.Position;
 import com.hrsys.pojo.entity.Result;
-import com.hrsys.service.IPositionService;
+import com.hrsys.pojo.vo.PositionVO;
 import com.hrsys.service.IPositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,11 +55,10 @@ public class PositionController {
 
     @GetMapping("/list")
     @ApiOperation(value = "获取职位列表")
-    public Result<IPage<Position>> list(@RequestParam(defaultValue = "1") Integer current,
-                                        @RequestParam(defaultValue = "10") Integer pageSize,
-                                        @RequestParam(defaultValue = "1") Integer categoryId) {
-        Page<Position> page = new Page<>(current, pageSize);
-        return Result.success(positionService.page(page,
-                new LambdaQueryWrapper<Position>().eq(Position::getCategoryId, categoryId)));
+    public Result<IPage<PositionVO>> list(@RequestParam(defaultValue = "1") Integer current,
+                                          @RequestParam(defaultValue = "10") Integer pageSize,
+                                          @RequestParam(defaultValue = "1") Integer categoryId) {
+        IPage<PositionVO> pageResult = positionService.search(current, pageSize, categoryId);
+        return Result.success(pageResult);
     }
 }

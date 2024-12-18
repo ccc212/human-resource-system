@@ -7,4 +7,5 @@ export const employeeAPI = {
   addEmployee: (data) => request.post('/hr-record/log', data),
   reviewEmployee: (id) => request.put('/hr-record/update', { recordId: id, status: '1' }),
   updateEmployee: (data) => request.put('/hr-record/update', data),
+  recoverEmployee: (id) => request.put('/hr-record/update', { recordId: id, status: '0' }),
 }; 
