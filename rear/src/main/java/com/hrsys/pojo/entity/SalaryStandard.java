@@ -67,7 +67,7 @@ public class SalaryStandard implements Serializable {
      */
     private List<SSitemDetailDao> items = new ArrayList<>();
 
-
+    private String  reviewComment;
     public void setRegistrationTime(LocalDateTime date) {
     this.registrationTime = date;
 

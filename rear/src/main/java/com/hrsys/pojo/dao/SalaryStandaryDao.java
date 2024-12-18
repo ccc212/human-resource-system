@@ -1,6 +1,5 @@
 package com.hrsys.pojo.dao;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -44,13 +43,14 @@ public class SalaryStandaryDao {
      */
 
     private ReviewStatus reviewStatus;
+    private String  reviewComment;
     /**
      * 薪酬项目列表
      */
     @TableField(exist = false)
     private List<SSitemDetailDao> items = new ArrayList<>();
 
-    public SalaryStandaryDao(List<SSitemDetailDao>list, String salaryStandardName, String creator, String registrar, String reviewer, LocalDateTime registrationTime) {
+    public SalaryStandaryDao(Long standardId, List<SSitemDetailDao>list, String salaryStandardName, String creator, String registrar, String reviewer, LocalDateTime registrationTime, ReviewStatus reviewStatus, String reviewComment) {
         this.items = list;
         this.salaryStandardName = salaryStandardName;
         this.creator = creator;

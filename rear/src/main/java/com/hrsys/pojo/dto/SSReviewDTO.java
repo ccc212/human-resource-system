@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class SSReviewDTO {
+    public Long salaryStandardId;
     public Long reviewId;
     public String reviewMessage;
     public Date reviewTime;
