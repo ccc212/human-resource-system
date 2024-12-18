@@ -59,12 +59,15 @@ public class SalaryStandardController {
     @ApiOperation("获取待审核薪酬标准")
     public ResponseEntity<?> getPendingSalaryStandard() {
         List<SalaryStandard> salaryStandard = sSim.PendingSalaryStandard();
+
+
         return ResponseEntity.ok(salaryStandard);
     }
     @PutMapping("/review")
     @ApiOperation("审核薪酬标准")
     public ResponseEntity<?> reviewSalaryStandard(@RequestBody @Valid SSReviewDTO ssReviewDTO) {
         boolean flag = sSim.reviewSalaryStandard(ssReviewDTO);
+        System.out.println("新的审核");
         if (flag) {
             return ResponseEntity.ok(StatusCodeEnum.SUCCESS);
         } else {

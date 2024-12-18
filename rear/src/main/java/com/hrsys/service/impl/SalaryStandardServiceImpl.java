@@ -38,8 +38,8 @@ public class SalaryStandardServiceImpl extends ServiceImpl<SalaryStandardMapper,
         UpdateWrapper<SalaryStandard> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("standard_id", ssReviewDTO.getReviewId())
                      .set("review_status", ssReviewDTO.getReviewStatus())
-                     .set("review_message", ssReviewDTO.getReviewMessage())
-                     .set("review_time", ssReviewDTO.getReviewTime());
+                     .set("review_message", ssReviewDTO.getReviewMessage());
+
 
         int nums=baseMapper.update(null,updateWrapper);
         if(nums==0){

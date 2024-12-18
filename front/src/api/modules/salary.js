@@ -27,6 +27,16 @@ export const salaryStandardAPI = {
   // 更新薪酬标准中的项目信息
   updateStandardItem: (standardId, itemId, data) => {
     return request.put(`/salarystrandary/${standardId}/items/${itemId}`, data);
+  },
+
+  // 获取待审核的薪酬标准
+  getPendingStandards: () => {
+    return request.get('/salarystrandary/getPending/');
+  },
+
+  // 提交审核
+  reviewStandard: (reviewData) => {
+    return request.put('/salarystrandary/review', reviewData);
   }
 };
 

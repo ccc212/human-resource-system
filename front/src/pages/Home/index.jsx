@@ -13,6 +13,7 @@ import {
   AccountBookOutlined,
   BarChartOutlined,
   AppstoreOutlined,
+  AuditOutlined,
 } from '@ant-design/icons';
 import { useNavigate, Outlet } from 'react-router-dom';
 import EmployeeForm from './components/EmployeeForm';
@@ -21,6 +22,7 @@ import SalaryStandard from './components/SalaryStandard';
 import SalaryPayment from './components/SalaryPayment';
 import SalaryStatistics from './components/SalaryStatistics';
 import SalaryItems from './components/SalaryItems';
+import SalaryStandardReview from './components/SalaryStandard/Review';
 import './style.css';
 
 const { Header, Sider, Content } = Layout;
@@ -110,7 +112,13 @@ const Home = () => {
           icon: <BarChartOutlined />,
           label: '薪酬统计',
           onClick: () => setActiveTab('salary-statistics'),
-        }
+        },
+        {
+          key: 'salary-review',
+          icon: <AuditOutlined />,
+          label: '薪酬审核',
+          onClick: () => setActiveTab('salary-review'),
+        },
       ],
     },
     {
@@ -151,6 +159,11 @@ const Home = () => {
       key: 'salary-items',
       label: '薪资项目管理',
       children: <SalaryItems />
+    },
+    {
+      key: 'salary-review',
+      label: '薪酬标准审核',
+      children: <SalaryStandardReview />
     }
   ].map(item => ({
     ...item,
