@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class SSimImpl {
 
     public List<SalaryStandard> getSalaryStandard(Long id) {
         MPJLambdaWrapper<SalaryStandaryDao> wrapper = new MPJLambdaWrapper<SalaryStandaryDao>()
-                .selectAll(SSitemDetailDao.class).eq(SalaryStandaryDao::getStandardId, id)
+                .selectAll(SalaryStandaryDao.class).eq(SalaryStandaryDao::getStandardId, id)
                 .selectCollection(SSitemDetailDao.class, SalaryStandaryDao::getItems)
                 .leftJoin(SSitemDetailDao.class, SSitemDetailDao::getStandardId, SalaryStandaryDao::getStandardId);
         List<SalaryStandard> salaryStandard = salaryStandardDaoMapper.selectJoinList(SalaryStandard.class, wrapper);
@@ -40,20 +41,34 @@ public class SSimImpl {
     }
     public List<SalaryStandard> PendingSalaryStandard() {
         MPJLambdaWrapper<SalaryStandaryDao> wrapper = new MPJLambdaWrapper<SalaryStandaryDao>()
-                .selectAll(SSitemDetailDao.class)
-                .eq(SalaryStandaryDao::getReviewer, ReviewStatus.PENDING.getDescription())
+                .selectAll(SalaryStandaryDao.class)
+                .eq(SalaryStandaryDao::getReviewStatus, ReviewStatus.PENDING)
                 .selectCollection(SSitemDetailDao.class, SalaryStandaryDao::getItems)
                 .leftJoin(SSitemDetailDao.class, SSitemDetailDao::getStandardId, SalaryStandaryDao::getStandardId);
         List<SalaryStandard> salaryStandard = salaryStandardDaoMapper.selectJoinList(SalaryStandard.class, wrapper);
+
+        // 确保返回一个空列表而不是null
+        if (salaryStandard == null) {
+            System.out.println("查询结果为空");
+        }
+
         return salaryStandard;
     }
+
 
     public List<SalaryStandard> getAllSalaryStandard() {
         MPJLambdaWrapper<SalaryStandaryDao> wrapper = new MPJLambdaWrapper<SalaryStandaryDao>()
                 .selectAll(SalaryStandaryDao.class)
+                .eq(SalaryStandaryDao::getReviewStatus, ReviewStatus.APPROVED)
                 .selectCollection(SSitemDetailDao.class, SalaryStandaryDao::getItems)
                 .leftJoin(SSitemDetailDao.class, SSitemDetailDao::getStandardId, SalaryStandaryDao::getStandardId);
         List<SalaryStandard> salaryStandard = salaryStandardDaoMapper.selectJoinList(SalaryStandard.class, wrapper);
+        for (SalaryStandard salaryStandard1 : salaryStandard) {
+         if (salaryStandard1.getReviewComment() == null){
+                salaryStandard1.setReviewComment("无");
+         }
+            System.out.println(salaryStandard1.getReviewComment());
+        }
         return salaryStandard;
     }
 
@@ -136,10 +151,11 @@ public class SSimImpl {
 //        更新warrper
         UpdateWrapper<SalaryStandaryDao> wrapper = new UpdateWrapper<>();
         wrapper.eq("standard_id", ssReviewDTO.salaryStandardId);
-        wrapper.set("reviewer", ssReviewDTO.reviewStatus);
+        wrapper.set("review_status", ssReviewDTO.reviewStatus);
         wrapper.set("review_comment", ssReviewDTO.reviewMessage);
         int nums = salaryStandardDaoMapper.update(null, wrapper);
         if (nums == 0) {
+            System.out.println("复审失败");
             return false;
         } else {
             return true;

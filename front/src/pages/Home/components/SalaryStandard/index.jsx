@@ -166,6 +166,39 @@ const SalaryStandard = () => {
       title: '状态',
       dataIndex: 'reviewStatus',
       key: 'reviewStatus',
+      render: (status) => {
+        const statusMap = {
+          'PENDING': '待审核',
+          'APPROVED': '已通过',
+          'REJECTED': '未通过'
+        };
+        return statusMap[status] || status;
+      }
+    },
+    {
+      title: '审核意见',
+      key: 'review',
+      render: (_, record) => (
+        record.reviewMessage ? (
+          <Button 
+            type="link" 
+            onClick={() => {
+              Modal.info({
+                title: '审核信息',
+                content: (
+                  <div>
+                    <p>审核结果：{record.reviewStatus === 'APPROVED' ? '通过' : '未通过'}</p>
+                    <p>审核时间：{moment(record.reviewTime).format('YYYY-MM-DD HH:mm:ss')}</p>
+                    <p>审核意见：{record.reviewMessage}</p>
+                  </div>
+                ),
+              });
+            }}
+          >
+            查看审核意见
+          </Button>
+        ) : '-'
+      )
     },
     {
       title: '项目总额',
