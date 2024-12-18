@@ -28,7 +28,6 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   response => {
-    // 可以统一处理响应数据
     return response.data;
   },
   error => {
@@ -36,14 +35,15 @@ instance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          message.error('未授权，请重新登录');
-          // 可以在这里处理登出逻辑
+          // 未授权，跳转到登录页
+          message.error('请重新登录');
+          window.location.href = '/login';
           break;
         case 403:
-          message.error('拒绝访问');
+          message.error('没有权限访问');
           break;
         case 404:
-          message.error('请求错误，未找到该资源');
+          message.error('请求的资源不存在');
           break;
         case 500:
           message.error('服务器错误');
@@ -52,7 +52,7 @@ instance.interceptors.response.use(
           message.error('网络错误');
       }
     } else {
-      message.error('网络错误，请检查您的网络连接');
+      message.error('网络连接失败');
     }
     return Promise.reject(error);
   }

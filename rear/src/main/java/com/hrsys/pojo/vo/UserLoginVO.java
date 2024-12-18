@@ -11,5 +11,7 @@ public class UserLoginVO implements Serializable {
 
     private Long userId;
 
+    private String username;
+
     private String token;
 }

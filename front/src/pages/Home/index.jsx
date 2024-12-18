@@ -1,5 +1,5 @@
 import { Layout, Menu, theme, Avatar, Dropdown, Tabs } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   UserOutlined, 
   HomeOutlined,
@@ -32,7 +32,6 @@ import './style.css';
 
 const { Header, Sider, Content } = Layout;
 
-
 const Home = () => {
   const navigate = useNavigate();
   const {
@@ -40,6 +39,14 @@ const Home = () => {
   } = theme.useToken();
 
   const [activeTab, setActiveTab] = useState('employee-add');
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   const userMenuItems = [
     {
@@ -97,7 +104,7 @@ const Home = () => {
         {
           key: 'salary-items',
           icon: <AppstoreOutlined />,
-          label: '薪资项目',
+          label: '薪��项目',
           onClick: () => setActiveTab('salary-items'),
         },
         {
@@ -267,7 +274,7 @@ const Home = () => {
       <Layout>
         <Header className="site-header" style={{ background: colorBgContainer }}>
           <div className="header-content">
-            <span className="welcome-text">欢迎回来，管理员</span>
+            <span className="welcome-text">欢迎回来，{username}</span>
             <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
               <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
             </Dropdown>

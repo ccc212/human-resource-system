@@ -14,6 +14,7 @@ const Login = () => {
         const { token, userId } = response.data.data;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
+        localStorage.setItem('username', values.username);
         message.success('登录成功');
         navigate('/home');
       } else {

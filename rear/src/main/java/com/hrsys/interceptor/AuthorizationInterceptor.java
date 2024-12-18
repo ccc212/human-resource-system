@@ -48,20 +48,91 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         // 3、根据请求路径进行鉴权
         if (requestURI.startsWith("/hr-record")) {
             // 检查是否具有管理员权限
-            String role = claims.get("role", String.class);
-            if (!"admin".equals(role)) {
+            Integer roleId = claims.get("roleId", Integer.class);
+            if (!(roleId == 1 || roleId == 2 || roleId == 3)) {
                 response.setStatus(403); // 禁止访问
                 return false;
             }
         } else if (requestURI.startsWith("/user")) {
             // 检查是否具有用户权限
-            String role = claims.get("role", String.class);
-            if (!"user".equals(role)) {
-                response.setStatus(403); // 禁止访问
-                return false;
-            }
+//            String roleId = claims.get("roleId", String.class);
+//            if (!"user".equals(role)) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
             //TODO: 其他权限
         }
+//        } else if (requestURI.startsWith("/position")) {
+//            // 检查是否具有职位权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/position-categorie")) {
+//            // 检查是否具有职位分类权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/role")) {
+//            // 检查是否具有角色权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/education")) {
+//            // 检查是否具有学历权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/title")) {
+//            // 检查是否具有职称权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/ethnicitie")) {
+//            // 检查是否具有民族权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/organization")) {
+//            // 检查是否具有机构权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/salary-detail")) {
+//            // 检查是否具有薪酬发放明细权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/salary-payment")) {
+//            // 检查是否具有薪酬发放登记权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        } else if (requestURI.startsWith("/salarystrandary")) {
+//            // 检查是否具有薪酬标准权限
+//            Integer roleId = claims.get("roleId", Integer.class);
+//            if (roleId == 6) {
+//                response.setStatus(403); // 禁止访问
+//                return false;
+//            }
+//        }
 
         // 4、通过，放行
         return true;

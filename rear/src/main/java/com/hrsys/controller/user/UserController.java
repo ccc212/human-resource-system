@@ -61,7 +61,7 @@ public class UserController {
                 claims
         );
 
-        return Result.success(new UserLoginVO(user.getUserId(), token));
+        return Result.success(new UserLoginVO(user.getUserId(), user.getUsername(), token));
     }
 
     @PostMapping("/register")
