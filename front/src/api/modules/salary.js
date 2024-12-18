@@ -17,6 +17,16 @@ export const salaryStandardAPI = {
   // 新增薪酬标准
   addSalaryStandard: (data) => {
     return request.post('/salarystrandary/add', data);
+  },
+
+  // 更新薪酬标准（包含所有信息）
+  updateStandard: (standardId, data) => {
+    return request.put(`/salarystrandary/update/${standardId}`, data);
+  },
+
+  // 更新薪酬标准中的项目信息
+  updateStandardItem: (standardId, itemId, data) => {
+    return request.put(`/salarystrandary/${standardId}/items/${itemId}`, data);
   }
 };
 

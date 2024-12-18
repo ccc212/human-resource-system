@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, Space, DatePicker, message, InputNumber, Spin, Divider, Select } from 'antd';
+import { Table, Button, Modal, Form, Input, Space, message, InputNumber, Spin, Divider, Select } from 'antd';
 import moment from 'moment';
 import { salaryStandardAPI } from '../../../../api/modules/salary';
 
@@ -73,6 +73,9 @@ const SalaryStandard = () => {
   const[fixed_items,setFixed_items]=useState([])
   const[unfixed_items,setUFixed_items]=useState([])
   const [standardItems, setStandardItems] = useState([]); // 用于存储当前编辑的标准项目
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);  // 新增模态框
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false); // 编辑模态框
+  const [editForm] = Form.useForm();  // 编辑表单
   
   // 获取数据的方法
   const fetchSalaryStandards = async () => {
@@ -177,9 +180,9 @@ const SalaryStandard = () => {
       key: 'action',
       render: (_, record) => (
         <Space>
-          <Button onClick={() => handleEdit(record)}>编辑</Button>
+          <Button onClick={() => handleEdit(record)}>编辑标准</Button>
+          <Button onClick={() => handleViewItems(record)}>管理项目</Button>
           <Button danger onClick={() => handleDelete(record.standardId)}>删除</Button>
-          <Button onClick={() => handleViewItems(record)}>查看项目</Button>
         </Space>
       ),
     },
@@ -187,26 +190,24 @@ const SalaryStandard = () => {
 
   // 处理新增
   const handleAdd = () => {
-    setEditingRecord(null);
     form.resetFields();
-    // 根据新的数据格式初始化固定项目
     setStandardItems(fixed_items.map(item => ({
       ...item,
       itemID: item.itemId,
       name: item.itemName,
       account: 0
     })));
-    setIsModalVisible(true);
+    setIsAddModalVisible(true);
   };
 
   // 处理编辑
   const handleEdit = (record) => {
     setEditingRecord(record);
-    form.setFieldsValue({
-      ...record,
-      registrationTime: moment(record.registrationTime.join('-'))
+    editForm.setFieldsValue({
+      salaryStandardName: record.salaryStandardName,
+      creator: record.creator
     });
-    setIsModalVisible(true);
+    setIsEditModalVisible(true);
   };
 
   // 处理删除
@@ -216,7 +217,7 @@ const SalaryStandard = () => {
       onOk: async () => {
         try {
           setLoading(true);
-          // TODO: 实现删除API
+   
           await fetchData();
           message.success('删除成功');
         } catch (error) {
@@ -233,9 +234,12 @@ const SalaryStandard = () => {
   };
 
   // 处理项目编辑
-  const handleEditItem = (item) => {
-    setEditingItem(item);
-    itemForm.setFieldsValue(item);
+  const handleEditItem = (standardId, item) => {
+    setEditingItem({ ...item, standardId });
+    itemForm.setFieldsValue({
+      account: item.account
+    });
+    setIsItemModalVisible(true);
   };
 
   // 处理项目删除
@@ -248,30 +252,51 @@ const SalaryStandard = () => {
     message.success('删除成功');
   };
 
-  // 处理项目提交
+  // 处理项目更新提交
   const handleItemSubmit = async () => {
     try {
       const values = await itemForm.validateFields();
-      const newItem = {
-        ...values,
-        itemID: editingItem ? editingItem.itemID : Date.now().toString(),
-        standardId: selectedStandard.standardId
-      };
+      
+      if (editingItem && selectedStandard) {
+        // 创建新的项目列表，更新编辑项目的金额
+        const updatedItems = selectedStandard.items.map(item => {
+          if (item.itemID === editingItem.itemID) {
+            return {
+              ...item,
+              account: values.account
+            };
+          }
+          return item;
+        });
 
-      const updatedItems = editingItem
-        ? selectedStandard.items.map(item => 
-            item.itemID === editingItem.itemID ? newItem : item
-          )
-        : [...selectedStandard.items, newItem];
+        // 构造完整的更新数据
+        const formData = {
+          standardId: selectedStandard.standardId,
+          salaryStandardName: selectedStandard.salaryStandardName,
+          creator: selectedStandard.creator,
+          registrar: selectedStandard.registrar,
+          reviewer: selectedStandard.reviewer,
+          reviewStatus: selectedStandard.reviewStatus,
+          items: updatedItems.map(item => ({
+            itemID: item.itemID || item.itemId,
+            standardId: selectedStandard.standardId,
+            name: item.name || item.itemName,
+            account: item.account
+          }))
+        };
 
-      setSelectedStandard({
-        ...selectedStandard,
-        items: updatedItems
-      });
+        // 打印发送的数据
+        console.log('管理项目发送的数据:', formData);
+
+        // 使用与编辑标准相同的 API
+        await salaryStandardAPI.updateStandard(selectedStandard.standardId, formData);
+        message.success('更新成功');
+        setIsItemModalVisible(false);
+        await fetchData(); // 刷新数据
+      }
 
       setEditingItem(null);
       itemForm.resetFields();
-      message.success('操作成功');
     } catch (error) {
       message.error('操作失败');
     }
@@ -282,8 +307,8 @@ const SalaryStandard = () => {
     return baseAmount * rate;
   };
 
-  // 表单提交
-  const handleSubmit = async () => {
+  // 处理新增提交
+  const handleAddSubmit = async () => {
     try {
       const values = await form.validateFields();
       
@@ -296,41 +321,57 @@ const SalaryStandard = () => {
 
       const formData = {
         ...values,
-        registrationTime: values.registrationTime.format('YYYY-MM-DD').split('-').map(Number),
-        items: standardItems.map(item => {
-          if (item.isFixed && item.name !== '基本工资') {
-            // 固定项目根据基本工资和比率计算金额
-            return {
-              itemId: item.itemID,
-              itemName: item.name,
-              account: calculateFixedItemAmount(baseItem.account, item.rate),
-              isFixed: item.isFixed,
-              rate: item.rate
-            };
-          }
-          return {
-            itemId: item.itemID,
-            itemName: item.name,
-            account: item.account,
-            isFixed: item.isFixed,
-            rate: item.rate
-          };
-        }),
+        items: standardItems.map(item => ({
+          itemId: item.itemID,
+          itemName: item.name,
+          account: item.account,
+          isFixed: item.isFixed,
+          rate: item.rate
+        })),
         reviewStatus: 'PENDING'
       };
 
       setLoading(true);
-      if (editingRecord) {
-        formData.standardId = editingRecord.standardId;
-        // 更新操作
-      } else {
-        // 新增操作
-        await salaryStandardAPI.addSalaryStandard(formData);
-      }
-      
-      setIsModalVisible(false);
+      await salaryStandardAPI.addSalaryStandard(formData);
+      message.success('添加成功');
+      setIsAddModalVisible(false);
       await fetchData();
-      message.success(editingRecord ? '更新成功' : '添加成功');
+    } catch (error) {
+      message.error('操作失败: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 处理编辑提交
+  const handleEditSubmit = async () => {
+    try {
+      const values = await editForm.validateFields();
+      
+      // 构造与接收格式一致的数据体
+      const formData = {
+        standardId: editingRecord.standardId,
+        salaryStandardName: values.salaryStandardName,
+        creator: values.creator,
+        registrar: editingRecord.registrar,
+        reviewer: editingRecord.reviewer,
+        reviewStatus: editingRecord.reviewStatus,
+        items: editingRecord.items.map(item => ({
+          itemID: item.itemID || item.itemId, // 确保使用正确的 itemID
+          standardId: editingRecord.standardId,
+          name: item.name || item.itemName, // 确保使用正确的 name
+          account: item.account
+        }))
+      };
+
+      // 打印发送的数据
+      console.log('编辑标准发送的数据:', formData);
+
+      setLoading(true);
+      await salaryStandardAPI.updateStandard(editingRecord.standardId, formData);
+      message.success('更新成功');
+      setIsEditModalVisible(false);
+      await fetchData();
     } catch (error) {
       message.error('操作失败: ' + error.message);
     } finally {
@@ -368,7 +409,7 @@ const SalaryStandard = () => {
       itemForm.resetFields();
       message.success('添加项目成功');
     } catch (error) {
-      console.error('添加浮动项目失败:', error);
+      console.error('添加动项目失败:', error);
       message.error('添加项目失败: ' + error.message);
     }
   };
@@ -384,14 +425,19 @@ const SalaryStandard = () => {
       title: '金额',
       dataIndex: 'account',
       key: 'account',
+      render: (account) => `¥${Number(account).toFixed(2)}`
     },
     {
       title: '操作',
       key: 'action',
       render: (_, record) => (
         <Space>
-          <Button onClick={() => handleEditItem(record)}>编辑</Button>
-          <Button danger onClick={() => handleDeleteItem(record.itemID)}>删除</Button>
+          <Button 
+            onClick={() => handleEditItem(selectedStandard.standardId, record)}
+            disabled={record.isFixed && record.name !== '基本工资'} // 只允编辑基本工资和浮动项目
+          >
+            编辑
+          </Button>
         </Space>
       ),
     }
@@ -429,11 +475,12 @@ const SalaryStandard = () => {
           rowKey="standardId"
         />
 
+        {/* 新增标准模态框 */}
         <Modal
-          title={editingRecord ? '编辑标准' : '新增标准'}
-          visible={isModalVisible}
-          onOk={handleSubmit}
-          onCancel={() => setIsModalVisible(false)}
+          title="新增标准"
+          visible={isAddModalVisible}
+          onOk={handleAddSubmit}
+          onCancel={() => setIsAddModalVisible(false)}
           width={800}
         >
           <Form form={form} layout="vertical">
@@ -442,9 +489,6 @@ const SalaryStandard = () => {
             </Form.Item>
             <Form.Item name="creator" label="创建人" rules={[{ required: true }]}>
               <Input />
-            </Form.Item>
-            <Form.Item name="registrationTime" label="登记时间" rules={[{ required: true }]}>
-              <DatePicker />
             </Form.Item>
 
             {/* 薪酬项目部分 */}
@@ -491,7 +535,7 @@ const SalaryStandard = () => {
                           />
                         );
                       } else {
-                        // 其他固定项目显示计算后的金额
+                        // 其他固定项目显示算后的金额
                         const baseItem = standardItems.find(item => item.name === '基本工资');
                         const baseAmount = baseItem?.account || 0;
                         const amount = calculateFixedItemAmount(baseAmount, record.rate);
@@ -621,7 +665,7 @@ const SalaryStandard = () => {
                   }
                 ]}
                 dataSource={standardItems.filter(item => 
-                  // 只显示非固定项目
+                  // 只显示固定项目
                   !item.isFixed &&
                   // 确保项目存在于浮动项目列表中
                   unfixed_items.some(unfixed => unfixed.itemId === item.itemID)
@@ -633,6 +677,24 @@ const SalaryStandard = () => {
             </div>
           </Form>
         </Modal>
+
+        {/* 编辑标准模态框 */}
+        <Modal
+          title="编辑薪酬标准"
+          visible={isEditModalVisible}
+          onOk={handleEditSubmit}
+          onCancel={() => setIsEditModalVisible(false)}
+          width={800}
+        >
+          <Form form={editForm} layout="vertical">
+            <Form.Item name="salaryStandardName" label="标准名称" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="creator" label="创建人" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </Form>
+        </Modal>
         
         <Modal
           title="薪酬项目管理"
@@ -640,29 +702,97 @@ const SalaryStandard = () => {
           onCancel={() => {
             setIsItemModalVisible(false);
             setSelectedStandard(null);
-            setEditingItem(null);
-            itemForm.resetFields();
           }}
-          footer={null}
+          onOk={async () => {
+            // 构造更新数据
+            const formData = {
+              standardId: selectedStandard.standardId,
+              salaryStandardName: selectedStandard.salaryStandardName,
+              creator: selectedStandard.creator,
+              registrar: selectedStandard.registrar,
+              reviewer: selectedStandard.reviewer,
+              reviewStatus: selectedStandard.reviewStatus,
+              items: selectedStandard.items.map(item => ({
+                itemID: item.itemID,
+                standardId: selectedStandard.standardId,
+                name: item.name,
+                account: item.account
+              }))
+            };
+
+            try {
+              await salaryStandardAPI.updateStandard(selectedStandard.standardId, formData);
+              message.success('保存成功');
+              setIsItemModalVisible(false);
+              await fetchData();
+            } catch (error) {
+              message.error('保存失败');
+            }
+          }}
         >
-          <Form form={itemForm} layout="inline" onFinish={handleItemSubmit}>
-            <Form.Item name="name" rules={[{ required: true }]}>
-              <Input placeholder="项目名称" />
-            </Form.Item>
-            <Form.Item name="account" rules={[{ required: true }]}>
-              <InputNumber placeholder="金额" />
-            </Form.Item>
-            <Button type="primary" htmlType="submit">
-              {editingItem ? '更新' : '添加'}
-            </Button>
-          </Form>
-          
-          <Table
-            columns={itemColumns}
-            dataSource={selectedStandard?.items || []}
-            rowKey="itemID"
-            style={{ marginTop: 16 }}
-          />
+          <div style={{ padding: '20px 0' }}>
+            {/* 添加项目的输入框 */}
+            <Space style={{ marginBottom: 16 }}>
+              <Select
+                placeholder="选择项目"
+                style={{ width: 200 }}
+                options={unfixed_items.map(item => ({
+                  label: item.itemName,
+                  value: item.itemId
+                }))}
+                onChange={(value, option) => {
+                  const selectedItem = unfixed_items.find(item => item.itemId === value);
+                  if (selectedItem) {
+                    const newItems = [...selectedStandard.items, {
+                      itemID: selectedItem.itemId,
+                      standardId: selectedStandard.standardId,
+                      name: selectedItem.itemName,
+                      account: 0
+                    }];
+                    setSelectedStandard({
+                      ...selectedStandard,
+                      items: newItems
+                    });
+                  }
+                }}
+              />
+            </Space>
+
+            {/* 项目列表 */}
+            {selectedStandard?.items.map(item => (
+              <div key={item.itemID} style={{ marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span style={{ width: 120 }}>{item.name}</span>
+                  <InputNumber
+                    value={item.account}
+                    onChange={(value) => {
+                      const newItems = selectedStandard.items.map(i => 
+                        i.itemID === item.itemID ? { ...i, account: value } : i
+                      );
+                      setSelectedStandard({
+                        ...selectedStandard,
+                        items: newItems
+                      });
+                    }}
+                    style={{ width: 150 }}
+                  />
+                </div>
+                <Button 
+                  type="link" 
+                  danger
+                  onClick={() => {
+                    const newItems = selectedStandard.items.filter(i => i.itemID !== item.itemID);
+                    setSelectedStandard({
+                      ...selectedStandard,
+                      items: newItems
+                    });
+                  }}
+                >
+                  删除
+                </Button>
+              </div>
+            ))}
+          </div>
         </Modal>
       </div>
     </Spin>
