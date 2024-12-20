@@ -106,7 +106,7 @@ const Home = () => {
         {
           key: 'salary-items',
           icon: <AppstoreOutlined />,
-          label: '薪��项目',
+          label: '薪酬项目',
           onClick: () => setActiveTab('salary-items'),
         },
         {
